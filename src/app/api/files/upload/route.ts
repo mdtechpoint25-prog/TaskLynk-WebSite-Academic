@@ -80,40 +80,60 @@ export async function POST(request: NextRequest) {
 
     let url = '';
     
-    // ✅ IMPROVED: Upload to Cloudinary (more reliable than Backblaze for this use case)
+    // ✅ PRIMARY: Try Replit App Storage first
     try {
       console.log(`📤 Uploading file: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
       
-      // Create FormData for Cloudinary upload
-      const cloudinaryFormData = new FormData();
-      cloudinaryFormData.append('file', file);
-      cloudinaryFormData.append('folder', 'tasklynk/job-files');
+      const { uploadToReplitStorage, isReplitStorageAvailable } = await import('@/lib/replit-storage');
       
-      // Upload to Cloudinary
-      const cloudinaryResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/cloudinary/upload`, {
-        method: 'POST',
-        body: cloudinaryFormData,
-      });
-      
-      if (!cloudinaryResponse.ok) {
-        const errorData = await cloudinaryResponse.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Cloudinary upload failed');
+      if (isReplitStorageAvailable()) {
+        const filePath = `job-${jobId}/${Date.now()}-${file.name}`;
+        const buffer = await file.arrayBuffer();
+        const result = await uploadToReplitStorage(filePath, Buffer.from(buffer));
+        
+        if (result.success && result.url) {
+          url = result.url;
+          console.log(`✅ File uploaded to Replit Storage: ${url}`);
+        } else {
+          throw new Error(result.error || 'Replit storage upload failed');
+        }
+      } else {
+        throw new Error('Replit storage not available');
       }
+    } catch (replitError) {
+      // ✅ FALLBACK: Use Cloudinary if Replit storage fails
+      console.warn('⚠️ Replit storage failed, falling back to Cloudinary:', replitError instanceof Error ? replitError.message : replitError);
       
-      const cloudinaryData = await cloudinaryResponse.json();
-      url = cloudinaryData.url;
-      
-      console.log(`✅ File uploaded successfully: ${url}`);
-    } catch (error) {
-      console.error('❌ File upload error:', error);
-      return NextResponse.json(
-        { 
-          error: 'Failed to upload file to storage', 
-          details: error instanceof Error ? error.message : 'Unknown error',
-          code: 'STORAGE_UPLOAD_FAILED'
-        },
-        { status: 500 }
-      );
+      try {
+        const cloudinaryFormData = new FormData();
+        cloudinaryFormData.append('file', file);
+        cloudinaryFormData.append('folder', 'tasklynk/job-files');
+        
+        const cloudinaryResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/cloudinary/upload`, {
+          method: 'POST',
+          body: cloudinaryFormData,
+        });
+        
+        if (!cloudinaryResponse.ok) {
+          const errorData = await cloudinaryResponse.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Cloudinary upload failed');
+        }
+        
+        const cloudinaryData = await cloudinaryResponse.json();
+        url = cloudinaryData.url;
+        
+        console.log(`✅ File uploaded to Cloudinary: ${url}`);
+      } catch (cloudinaryError) {
+        console.error('❌ All storage methods failed:', cloudinaryError);
+        return NextResponse.json(
+          { 
+            error: 'Failed to upload file to any storage backend', 
+            details: cloudinaryError instanceof Error ? cloudinaryError.message : 'Unknown error',
+            code: 'STORAGE_UPLOAD_FAILED'
+          },
+          { status: 500 }
+        );
+      }
     }
 
     // ✅ Store file metadata in database with ORIGINAL FILENAME preserved

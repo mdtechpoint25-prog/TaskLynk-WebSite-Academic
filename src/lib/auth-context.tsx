@@ -6,7 +6,7 @@ export type User = {
   id: number;
   email: string;
   name: string;
-  role: 'admin' | 'client' | 'freelancer' | 'manager' | 'account_owner';
+  role: 'admin' | 'client' | 'freelancer' | 'manager' | 'account_owner' | 'writer' | 'editor';
   approved: boolean;
   balance: number;
   rating: number | null;
