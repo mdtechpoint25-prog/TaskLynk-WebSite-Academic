@@ -40,29 +40,33 @@ src/
 ### Required Environment Variables
 The following environment variables must be configured:
 
-**Database (Turso):**
-- `TURSO_CONNECTION_URL` - Turso database connection URL
-- `TURSO_AUTH_TOKEN` - Turso authentication token
+**Database (Replit PostgreSQL):**
+- `DATABASE_URL` - Automatically set when you create a database through Replit's Database tool
 
 **File Storage (Supabase):**
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
-- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (required as secret)
 
 **Email (Resend):**
-- `RESEND_API_KEY` - Resend API key for sending emails
+- `RESEND_API_KEY` - Resend API key for sending emails (required as secret)
 
 **Payments:**
-- `MPESA_CONSUMER_KEY` - M-Pesa API consumer key
-- `MPESA_CONSUMER_SECRET` - M-Pesa API consumer secret
-- `MPESA_SHORTCODE` - M-Pesa business shortcode
-- `MPESA_PASSKEY` - M-Pesa API passkey
+- `MPESA_CONSUMER_KEY` - M-Pesa API consumer key (required as secret)
+- `MPESA_CONSUMER_SECRET` - M-Pesa API consumer secret (required as secret)
+- `MPESA_SHORTCODE` - M-Pesa business shortcode (required as secret)
+- `MPESA_PASSKEY` - M-Pesa API passkey (required as secret)
 - `MPESA_ENVIRONMENT` - 'sandbox' or 'production'
-- `PAYSTACK_SECRET_KEY` - Paystack secret key
+- `PAYSTACK_SECRET_KEY` - Paystack secret key (required as secret)
 - `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` - Paystack public key
 
 **Other:**
-- `CRON_SECRET` - Random secret for cron job authentication
+- `CRON_SECRET` - Random secret for cron job authentication (required as secret)
 - `NEXT_PUBLIC_APP_URL` - Application base URL
+
+**Setup Instructions:**
+1. Create PostgreSQL database through Replit Database tool (see DATABASE_SETUP.md)
+2. Provide required secrets through Replit Secrets panel
+3. Run `bun run db:push` to create database tables
 
 ### Running the Application
 ```bash
@@ -87,9 +91,14 @@ bun run setup-db
 ```
 
 ## Recent Changes
+- **2024-11-21**: Migrated from Turso (SQLite) to Replit PostgreSQL database
+  - Converted all database schemas from SQLite to PostgreSQL
+  - Updated Drizzle ORM configuration to use @neondatabase/serverless
+  - Changed data types: integer → serial for auto-increment, real → numeric, integer boolean → boolean
+  - **Note**: Resend integration was dismissed by user - will use RESEND_API_KEY secret directly
 - **2024-11**: Imported to Replit, configured for Replit environment
-- Configured Next.js to run on port 5000 with host 0.0.0.0
-- Set up webpack watch options for better file watching in Replit
+  - Configured Next.js to run on port 5000 with host 0.0.0.0
+  - Set up webpack watch options for better file watching in Replit
 
 ## Deployment Notes
 - Frontend runs on port 5000 (required for Replit)
