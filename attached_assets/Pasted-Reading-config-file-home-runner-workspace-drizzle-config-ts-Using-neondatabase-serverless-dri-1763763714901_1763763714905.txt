@@ -1,0 +1,67 @@
+Reading config file '/home/runner/workspace/drizzle.config.ts'
+Using '@neondatabase/serverless' driver for database querying
+ Warning  '@neondatabase/serverless' can only connect to remote Neon/Vercel Postgres/Supabase instances through a websocket
+[✓] Pulling schema from database...
+error: relation "system_settings_key_unique" already exists
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1087:33
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.query (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:80808:26)
+    at async pgPush (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:84417:13)
+    at async Object.handler (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:93855:9)
+    at async run (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:93101:7) {
+  length: 108,
+  severity: 'ERROR',
+  code: '42P07',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'index.c',
+  line: '885',
+  routine: 'index_create'
+}
+~/workspace$ ^[[200~npm run db:push --force~
+npm run db:push --force~bash: npm: command not found
+~/workspace$ npm run db:push --force
+npm warn using --force Recommended protections disabled.
+
+> app@0.1.0 db:push
+> drizzle-kit push --config drizzle.config.ts
+
+Reading config file '/home/runner/workspace/drizzle.config.ts'
+Using '@neondatabase/serverless' driver for database querying
+ Warning  '@neondatabase/serverless' can only connect to remote Neon/Vercel Postgres/Supabase instances through a websocket
+[✓] Pulling schema from database...
+error: relation "system_settings_key_unique" already exists
+    at file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1087:33
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.query (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:80808:26)
+    at async pgPush (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:84417:13)
+    at async Object.handler (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:93855:9)
+    at async run (/home/runner/workspace/node_modules/drizzle-kit/bin.cjs:93101:7) {
+  length: 108,
+  severity: 'ERROR',
+  code: '42P07',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'index.c',
+  line: '885',
+  routine: 'index_create'
+}
+~/workspace$ 

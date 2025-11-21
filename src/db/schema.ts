@@ -24,7 +24,7 @@ export const domains = pgTable('domains', {
 
 // 🔴 CRITICAL: System Settings - Persistent admin configuration
 export const systemSettings = pgTable('system_settings', {
-  key: text('key').notNull().unique().primaryKey(),
+  key: text('key').notNull().primaryKey(),
   value: text('value').notNull(),
   type: text('type').notNull(), // 'string', 'number', 'boolean'
   updatedBy: integer('updated_by').references(() => users.id, { onDelete: 'set null' }),
