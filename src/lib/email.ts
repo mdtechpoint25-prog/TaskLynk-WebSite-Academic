@@ -1,19 +1,3 @@
-import nodemailer from 'nodemailer';
-
-// HostAfrica SMTP Configuration
-const transporter = nodemailer.createTransport({
-  host: 'mail.tasklynk.co.ke',
-  port: 587,
-  secure: false, // Use STARTTLS
-  auth: {
-    user: 'admn@tasklynk.co.ke',
-    pass: 'Kemoda@2039'
-  },
-  tls: {
-    rejectUnauthorized: false // For self-signed certificates
-  }
-});
-
 // Admin email addresses
 export const ADMIN_EMAILS = [
   'topwriteessays@gmail.com',
@@ -24,14 +8,52 @@ export const ADMIN_EMAILS = [
   'ashleydothy3162@gmail.com'
 ];
 
-// Verify SMTP connection on startup
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('❌ SMTP connection failed:', error);
-  } else {
-    console.log('✅ SMTP server is ready to send emails');
+// Resend client (uses RESEND_API_KEY from environment)
+const resendApiKey = process.env.RESEND_API_KEY;
+
+interface ResendEmailResponse {
+  id: string;
+}
+
+async function sendViaResend(
+  to: string,
+  subject: string,
+  html: string
+): Promise<{ success: boolean; error?: any; data?: ResendEmailResponse }> {
+  if (!resendApiKey) {
+    console.warn('⚠️  RESEND_API_KEY not configured. Email delivery disabled.');
+    return { success: false, error: 'RESEND_API_KEY not configured' };
   }
-});
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: 'TaskLynk <noreply@tasklynk.co.ke>',
+        to,
+        subject,
+        html,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('❌ Resend API error:', error);
+      return { success: false, error };
+    }
+
+    const data = (await response.json()) as ResendEmailResponse;
+    console.log('✅ Email sent successfully via Resend:', data.id);
+    return { success: true, data };
+  } catch (error) {
+    console.error('❌ Failed to send email via Resend:', error);
+    return { success: false, error };
+  }
+}
 
 export async function sendEmail({
   to,
@@ -42,21 +64,7 @@ export async function sendEmail({
   subject: string;
   html: string;
 }) {
-  try {
-    // Always use admn@tasklynk.co.ke as sender
-    const info = await transporter.sendMail({
-      from: 'TaskLynk <admn@tasklynk.co.ke>',
-      to,
-      subject,
-      html,
-    });
-
-    console.log('✅ Email sent successfully:', info.messageId);
-    return { success: true, data: info };
-  } catch (error) {
-    console.error('❌ Failed to send email:', error);
-    return { success: false, error };
-  }
+  return sendViaResend(to, subject, html);
 }
 
 // Send email to all admins
