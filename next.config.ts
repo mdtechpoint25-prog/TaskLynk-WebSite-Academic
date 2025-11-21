@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
     },
   },
 
+  webpack: (config) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    }
+    return config
+  },
+
   // SEO Redirects - Handle all TaskLynk variations
   async redirects() {
     return [
