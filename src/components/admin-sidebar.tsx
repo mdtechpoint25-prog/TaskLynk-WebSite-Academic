@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import React, { useEffect, useState, Suspense } from "react";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -28,7 +29,6 @@ import {
   ShieldAlert
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { useEffect, useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 
 type NavItem = {
@@ -52,6 +52,15 @@ function AdminSidebarContent({ isOpen, onClose }: AdminSidebarContentProps) {
   const isUserManagementPath = pathname.startsWith("/admin/user-management");
   const [ordersOpen, setOrdersOpen] = useState<boolean>(isOrdersPath);
   const [userManagementOpen, setUserManagementOpen] = useState<boolean>(isUserManagementPath);
+
+  // Keep dropdowns open if on those paths
+  React.useEffect(() => {
+    setOrdersOpen(isOrdersPath);
+  }, [isOrdersPath]);
+
+  React.useEffect(() => {
+    setUserManagementOpen(isUserManagementPath);
+  }, [isUserManagementPath]);
 
   // Close on route change (mobile only)
   useEffect(() => {
@@ -134,7 +143,7 @@ function AdminSidebarContent({ isOpen, onClose }: AdminSidebarContentProps) {
               <button
                 type="button"
                 onClick={() => setOrdersOpen((v) => !v)}
-                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl border transition-colors ${isOrdersPath ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl border transition-colors ${isOrdersPath ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border font-semibold" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                 aria-expanded={ordersOpen}
               >
                 <span className="flex items-center gap-3">
@@ -219,7 +228,7 @@ function AdminSidebarContent({ isOpen, onClose }: AdminSidebarContentProps) {
               <button
                 type="button"
                 onClick={() => setUserManagementOpen((v) => !v)}
-                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl border transition-colors ${isUserManagementPath ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl border transition-colors ${isUserManagementPath ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border font-semibold" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                 aria-expanded={userManagementOpen}
               >
                 <span className="flex items-center gap-3">
