@@ -42,45 +42,49 @@ export async function POST(
       );
     }
 
-    // Accept this bid
-    await db
-      .update(bids)
-      .set({ status: 'accepted', updatedAt: new Date().toISOString() })
-      .where(eq(bids.id, bidId));
-
-    // Reject other pending bids for this job
-    await db
-      .update(bids)
-      .set({ status: 'rejected', updatedAt: new Date().toISOString() })
-      .where(and(
-        eq(bids.jobId, jobId),
-        eq(bids.status, 'pending')
-      ));
-
-    // Assign freelancer to job and update status
-    await db
-      .update(jobs)
-      .set({ 
-        assignedFreelancerId: bid[0].freelancerId,
-        status: 'assigned',
-        updatedAt: new Date().toISOString()
-      })
-      .where(eq(jobs.id, jobId));
-
-    // Create notification for freelancer
+    // Create notification data
     const notification = {
       userId: bid[0].freelancerId,
       jobId: jobId,
-      type: 'order_assigned',
+      type: 'order_assigned' as const,
       title: 'Bid Accepted!',
       message: `Your bid of $${bid[0].amount} for "${job[0].title}" has been accepted. You can start working on this order.`,
       read: false,
       createdAt: new Date().toISOString(),
     };
-    
-    await db.insert(notifications).values(notification);
 
-    // Broadcast real-time notification via centralized bus
+    // Execute all updates in a transaction for atomicity
+    await db.transaction(async (tx) => {
+      // Accept this bid
+      await tx
+        .update(bids)
+        .set({ status: 'accepted', updatedAt: new Date().toISOString() })
+        .where(eq(bids.id, bidId));
+
+      // Reject other pending bids for this job
+      await tx
+        .update(bids)
+        .set({ status: 'rejected', updatedAt: new Date().toISOString() })
+        .where(and(
+          eq(bids.jobId, jobId),
+          eq(bids.status, 'pending')
+        ));
+
+      // Assign freelancer to job and update status
+      await tx
+        .update(jobs)
+        .set({ 
+          assignedFreelancerId: bid[0].freelancerId,
+          status: 'assigned',
+          updatedAt: new Date().toISOString()
+        })
+        .where(eq(jobs.id, jobId));
+
+      // Create notification for freelancer
+      await tx.insert(notifications).values(notification);
+    });
+
+    // Broadcast real-time notification after successful transaction
     broadcastNotification(bid[0].freelancerId, notification);
 
     return NextResponse.json({ success: true, message: 'Bid accepted and freelancer assigned' });
