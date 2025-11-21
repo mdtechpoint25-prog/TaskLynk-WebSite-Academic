@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -21,7 +21,7 @@ type Job = {
   status: string;
 };
 
-export default function SubmitWorkPage() {
+function SubmitWorkContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -261,5 +261,17 @@ export default function SubmitWorkPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function SubmitWorkPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+      </div>
+    }>
+      <SubmitWorkContent />
+    </Suspense>
   );
 }
