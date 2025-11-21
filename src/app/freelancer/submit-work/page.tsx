@@ -9,8 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { FileUploadSection } from '@/components/file-upload-section';
-import { ArrowLeft, Upload, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
@@ -31,7 +30,7 @@ function SubmitWorkContent() {
   const [submissionType, setSubmissionType] = useState<'draft' | 'final'>('final');
   const [content, setContent] = useState('');
   const [wordCount, setWordCount] = useState(0);
-  const [files, setFiles] = useState<any[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [loadingJob, setLoadingJob] = useState(true);
 
@@ -62,10 +61,6 @@ function SubmitWorkContent() {
     } finally {
       setLoadingJob(false);
     }
-  };
-
-  const handleFileChange = (newFiles: File[]) => {
-    setFiles(newFiles);
   };
 
   const handleSubmit = async () => {
@@ -220,19 +215,27 @@ function SubmitWorkContent() {
 
           {/* File Upload */}
           <div className="space-y-3">
-            <Label>Upload Files</Label>
-            <FileUploadSection
-              files={files}
-              onFilesChange={handleFileChange}
-              maxFiles={5}
-              acceptedFileTypes={[
-                '.doc',
-                '.docx',
-                '.pdf',
-                '.txt',
-                '.xlsx',
-              ]}
+            <Label htmlFor="file-upload">Upload Files (Max 5 files)</Label>
+            <Input
+              id="file-upload"
+              type="file"
+              multiple
+              accept=".doc,.docx,.pdf,.txt,.xlsx"
+              onChange={(e) => {
+                const selectedFiles = Array.from(e.target.files || []);
+                if (selectedFiles.length > 5) {
+                  toast.error('Maximum 5 files allowed');
+                  return;
+                }
+                setFiles(selectedFiles);
+              }}
+              className="cursor-pointer"
             />
+            {files.length > 0 && (
+              <div className="text-sm text-muted-foreground">
+                {files.length} file(s) selected: {files.map(f => f.name).join(', ')}
+              </div>
+            )}
           </div>
 
           {/* Submit Button */}
