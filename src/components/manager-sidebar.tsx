@@ -143,67 +143,67 @@ function ManagerSidebarContent({ isOpen, onClose }: ManagerSidebarContentProps) 
               {ordersOpen && (
                 <ul className="mt-1 ml-8 space-y-1">
                   <li>
-                    <Link href="/manager/orders?status=all" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && (currentStatus === 'all' || !currentStatus) ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/all" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/all" || pathname === "/manager/orders" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <ClipboardList className="h-3.5 w-3.5" /> All
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=pending" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'pending' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/pending" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/pending" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <PauseCircle className="h-3.5 w-3.5" /> Pending
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=approved" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'approved' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/approved" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/approved" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <CheckCircle2 className="h-3.5 w-3.5" /> Approved
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=accepted" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'accepted' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/accepted" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/accepted" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <CheckCircle2 className="h-3.5 w-3.5" /> Accepted
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=assigned" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'assigned' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/assigned" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/assigned" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <Users className="h-3.5 w-3.5" /> Assigned
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=in_progress" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'in_progress' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/in-progress" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/in-progress" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <PlayCircle className="h-3.5 w-3.5" /> In Progress
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=editing" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'editing' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/editing" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/editing" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <ClipboardList className="h-3.5 w-3.5" /> Editing
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=delivered" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'delivered' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/delivered" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/delivered" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <PackageCheck className="h-3.5 w-3.5" /> Delivered
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=revision" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'revision' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/revision" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/revision" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <RotateCcw className="h-3.5 w-3.5" /> Revision
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=paid" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'paid' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/paid" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/paid" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <Receipt className="h-3.5 w-3.5" /> Paid
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=completed" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'completed' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/completed" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/completed" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <CheckCircle2 className="h-3.5 w-3.5" /> Completed
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=on_hold" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'on_hold' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/on-hold" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/on-hold" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <PauseCircle className="h-3.5 w-3.5" /> On Hold
                     </Link>
                   </li>
                   <li>
-                    <Link href="/manager/orders?status=cancelled" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname.startsWith("/manager/orders") && currentStatus === 'cancelled' ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
+                    <Link href="/manager/orders/cancelled" className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${pathname === "/manager/orders/cancelled" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}>
                       <Ban className="h-3.5 w-3.5" /> Cancelled
                     </Link>
                   </li>

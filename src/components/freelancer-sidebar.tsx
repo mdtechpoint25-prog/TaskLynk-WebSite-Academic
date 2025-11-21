@@ -146,72 +146,64 @@ function FreelancerSidebarContent({ isOpen, onClose }: FreelancerSidebarContentP
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=on-hold"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "on-hold" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/on-hold"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/on-hold" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <PauseCircle className="h-3.5 w-3.5" /> On Hold
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=in-progress"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "in-progress" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/in-progress"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/in-progress" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <PlayCircle className="h-3.5 w-3.5" /> In Progress
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=editing"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "editing" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/editing"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/editing" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <PenLine className="h-3.5 w-3.5" /> Editing
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=delivered"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "delivered" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/delivered"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/delivered" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <PackageCheck className="h-3.5 w-3.5" /> Delivered
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=revision"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "revision" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/revision"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/revision" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <RotateCcw className="h-3.5 w-3.5" /> Revision
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=approved"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "approved" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/approved"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/approved" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" /> Approved
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=paid"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "paid" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
-                    >
-                      <Receipt className="h-3.5 w-3.5" /> Paid
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/freelancer/jobs?status=completed"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "completed" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/completed"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/completed" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" /> Completed
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/freelancer/jobs?status=cancelled"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/jobs") && currentStatus === "cancelled" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/cancelled"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/cancelled" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <Ban className="h-3.5 w-3.5" /> Cancelled
                     </Link>
