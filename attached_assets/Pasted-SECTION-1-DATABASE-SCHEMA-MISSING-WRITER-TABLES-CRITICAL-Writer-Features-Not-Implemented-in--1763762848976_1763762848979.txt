@@ -1,0 +1,87 @@
+SECTION 1: DATABASE SCHEMA - MISSING WRITER TABLES
+❌ CRITICAL - Writer Features Not Implemented in Database
+Based on the Writer Features document provided, the following REQUIRED tables are MISSING:
+
+Table Name	Purpose	Status
+writers	Core writer profiles with manager assignment	❌ MISSING
+writer_profiles	Extended writer info (education, CV, portfolio)	❌ MISSING
+writer_skills	Pivot table: writer-to-skills relationship	❌ MISSING
+skills	Global skills/subjects list	❌ MISSING
+writer_wallets	Writer earnings and balance tracking	❌ MISSING
+submissions	Draft & final submission tracking	❌ MISSING
+submission_files	Files uploaded during submissions	❌ MISSING
+Impact: Writers cannot:
+
+Register and create profiles
+Manage skills
+Track earnings
+Submit work
+Store draft/final submissions
+Solution: Add these tables to src/db/schema.ts:
+
+// Writers Table
+export const writers = pgTable('writers', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().unique().references(() => users.id),
+  assignedManagerId: integer('assigned_manager_id').references(() => users.id),
+  overallRating: numeric('overall_rating', { precision: 3, scale: 2 }),
+  totalOrdersCompleted: integer('total_orders_completed').default(0),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+// Writer Skills Pivot
+export const writerSkills = pgTable('writer_skills', {
+  id: serial('id').primaryKey(),
+  writerId: integer('writer_id').references(() => writers.id),
+  skillName: text('skill_name').notNull(),
+  proficiencyLevel: text('proficiency_level'), // beginner, intermediate, expert
+  createdAt: text('created_at').notNull(),
+});
+// Writer Wallets
+export const writerWallets = pgTable('writer_wallets', {
+  id: serial('id').primaryKey(),
+  writerId: integer('writer_id').notNull().unique().references(() => writers.id),
+  balance: numeric('balance', { precision: 10, scale: 2 }).default('0'),
+  totalEarned: numeric('total_earned', { precision: 10, scale: 2 }).default('0'),
+  updatedAt: text('updated_at').notNull(),
+});
+// Submissions
+export const submissions = pgTable('submissions', {
+  id: serial('id').primaryKey(),
+  jobId: integer('job_id').notNull().references(() => jobs.id),
+  writerId: integer('writer_id').notNull().references(() => users.id),
+  submissionType: text('submission_type').notNull(), // 'draft', 'final', 'revision'
+  content: text('content'),
+  status: text('status').notNull().default('pending'), // pending, approved, rejected
+  submittedAt: text('submitted_at').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+// Submission Files
+export const submissionFiles = pgTable('submission_files', {
+  id: serial('id').primaryKey(),
+  submissionId: integer('submission_id').notNull().references(() => submissions.id),
+  fileName: text('file_name').notNull(),
+  fileUrl: text('file_url').notNull(),
+  fileSize: integer('file_size'),
+  createdAt: text('created_at').notNull(),
+});
+
+SECTION 2: NAVIGATION & ROUTING ISSUES
+❌ Admin Sidebar - Navigation Links Status
+Found in src/components/admin-sidebar.tsx:
+
+All admin pages exist but need verification:
+
+✅ /admin/dashboard - Dashboard
+✅ /admin/jobs - Orders management
+✅ /admin/managers - Manager management
+✅ /admin/domains - Domain management
+✅ /admin/payments - Payments
+✅ /admin/payouts - Payouts
+✅ /admin/user-management - User management (admins, clients, freelancers, managers)
+✅ /admin/messages - Messages
+✅ /admin/emails - Email logs
+✅ /admin/settings - Settings
+✅ /admin/audit-logs - Audit logs
+✅ /admin/revisions - Revisions management
+Issue: Some sidebar items may not properly expand/collapse or show active states.

@@ -695,3 +695,92 @@ export const clientProfiles = pgTable('client_profiles', {
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
 });
+
+// ✅ WRITER TABLES - Missing writer/freelancer features (CRITICAL)
+
+// Writers Table - Core writer profiles with manager assignment
+export const writers = pgTable('writers', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
+  assignedManagerId: integer('assigned_manager_id').references(() => users.id, { onDelete: 'set null' }),
+  overallRating: numeric('overall_rating', { precision: 3, scale: 2 }).default('0'),
+  totalOrdersCompleted: integer('total_orders_completed').default(0),
+  totalEarned: numeric('total_earned', { precision: 10, scale: 2 }).default('0'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+// Writer Profiles - Extended writer info (education, CV, portfolio)
+export const writerProfiles = pgTable('writer_profiles', {
+  id: serial('id').primaryKey(),
+  writerId: integer('writer_id').notNull().unique().references(() => writers.id, { onDelete: 'cascade' }),
+  education: text('education'), // JSON array of education records
+  certifications: text('certifications'), // JSON array
+  portfolioUrl: text('portfolio_url'),
+  cvUrl: text('cv_url'),
+  bio: text('bio'),
+  languages: text('languages'), // JSON array
+  yearsExperience: integer('years_experience'),
+  isProfileComplete: boolean('is_profile_complete').default(false),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+// Writer Skills - Pivot table linking writers to skills
+export const writerSkills = pgTable('writer_skills', {
+  id: serial('id').primaryKey(),
+  writerId: integer('writer_id').notNull().references(() => writers.id, { onDelete: 'cascade' }),
+  skillName: text('skill_name').notNull(),
+  proficiencyLevel: text('proficiency_level').default('intermediate'), // beginner, intermediate, expert
+  yearsOfExperience: integer('years_of_experience'),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+// Skills - Global skills/subjects list
+export const skills = pgTable('skills', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull().unique(),
+  category: text('category'), // e.g., 'writing', 'editing', 'research'
+  description: text('description'),
+  createdAt: text('created_at').notNull(),
+});
+
+// Writer Wallets - Earnings and balance tracking
+export const writerWallets = pgTable('writer_wallets', {
+  id: serial('id').primaryKey(),
+  writerId: integer('writer_id').notNull().unique().references(() => writers.id, { onDelete: 'cascade' }),
+  balance: numeric('balance', { precision: 10, scale: 2 }).default('0'),
+  totalEarned: numeric('total_earned', { precision: 10, scale: 2 }).default('0'),
+  totalWithdrawn: numeric('total_withdrawn', { precision: 10, scale: 2 }).default('0'),
+  pendingBalance: numeric('pending_balance', { precision: 10, scale: 2 }).default('0'),
+  updatedAt: text('updated_at').notNull(),
+  createdAt: text('created_at').notNull(),
+});
+
+// Submissions - Draft & final submission tracking
+export const submissions = pgTable('submissions', {
+  id: serial('id').primaryKey(),
+  jobId: integer('job_id').notNull().references(() => jobs.id, { onDelete: 'cascade' }),
+  writerId: integer('writer_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  submissionType: text('submission_type').notNull(), // 'draft', 'final', 'revision'
+  content: text('content'),
+  wordCount: integer('word_count'),
+  status: text('status').notNull().default('pending'), // pending, approved, rejected, revision_requested
+  approvalNotes: text('approval_notes'),
+  submittedAt: text('submitted_at').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+// Submission Files - Files uploaded during submissions
+export const submissionFiles = pgTable('submission_files', {
+  id: serial('id').primaryKey(),
+  submissionId: integer('submission_id').notNull().references(() => submissions.id, { onDelete: 'cascade' }),
+  fileName: text('file_name').notNull(),
+  fileUrl: text('file_url').notNull(),
+  fileSize: integer('file_size'),
+  fileType: text('file_type'),
+  uploadedAt: text('uploaded_at').notNull(),
+  createdAt: text('created_at').notNull(),
+});
