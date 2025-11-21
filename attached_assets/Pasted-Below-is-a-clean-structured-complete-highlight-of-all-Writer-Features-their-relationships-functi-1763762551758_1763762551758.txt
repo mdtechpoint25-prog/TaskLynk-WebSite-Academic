@@ -1,0 +1,204 @@
+Below is a clean, structured, complete highlight of all Writer Features, their relationships, functionalities, registration flow, dashboard components, and interaction with managers & the payment system.
+This is written in a system-design format that developers, product designers, and database architects can use immediately.
+________________________________________
+✅ 1. WRITER REGISTRATION
+1.1 Registration Sources
+Writers can register through:
+1.	Self-registration page
+2.	Invitation link from manager/admin
+3.	Admin-created account
+1.2 Data Collected During Registration
+•	Name
+•	Email
+•	Password
+•	Skills / subjects
+•	Experience level
+•	Optional: uploaded samples
+•	Optional: phone number
+1.3 Database Tables Involved
+Table	Purpose
+users	stores main login credentials and role=“writer”
+writers	stores writer-specific info (skills, rating, assigned manager)
+writer_profiles	extended information (education, CV, portfolio)
+skills	global skills list
+writer_skills	pivot linking a writer to multiple skills
+Relationship:
+users (1) → (1) writers
+writers (1) → (many) bids
+writers (1) → (many) orders
+writers (many) → (1) manager
+________________________________________
+✅ 2. WRITER ROLE IN THE SYSTEM
+Writers are one of the primary user groups, and they interact with:
+•	Managers
+•	Admin
+•	Clients (indirectly via orders)
+•	Orders
+•	Payments
+Writers produce work, submit content, request clarifications, and earn payouts.
+________________________________________
+✅ 3. WRITER FEATURES & FUNCTIONALITY
+Here are the main writer capabilities:
+________________________________________
+3.1 Dashboard
+Writer Dashboard Displays:
+•	Available Orders (for bidding)
+•	Assigned Orders
+•	Orders in Progress
+•	Orders under Revision
+•	Submitted Orders waiting approval
+•	Completed Orders
+•	Payments/Earnings
+•	Notifications (new orders, revision requests, payment updates)
+________________________________________
+3.2 Bidding System
+Writers see Available Orders posted by manager/admin.
+They can:
+•	View full order details
+•	Submit a bid:
+o	Bid cost (if allowed)
+o	Delivery time
+o	Message to the admin/manager
+Bids are stored in the bids table.
+Bid Relationship:
+•	One order → many bids
+•	One writer → many bids
+•	One bid → belongs to one writer & one order
+When a manager/admin accepts a bid:
+•	order.assigned_writer_id = writer.id
+•	bid.status = “accepted”
+________________________________________
+3.3 Order Work Area
+Once a writer is assigned an order, they can:
+•	View full instructions
+•	Download files
+•	Send clarification messages
+•	Upload draft work
+•	Upload final submission
+Data stores:
+Table	Description
+submissions	final and draft submissions
+submission_files	file uploads
+order_messages	communication between writer and manager
+________________________________________
+3.4 Revisions
+Managers/Admins review submissions.
+If revision is needed:
+•	order.status = "Revision"
+•	writer receives instructions
+•	writer edits and resubmits
+Revision records stored in:
+•	revisions table
+•	revision_files table
+________________________________________
+3.5 Completion & Rating
+Once work is fully approved:
+•	order.status = “Completed”
+•	writer gets a rating from manager (optional)
+•	earning for that order is recorded
+________________________________________
+✅ 4. PAYMENT SYSTEM FOR WRITERS
+Writers earn money per approved order.
+Payment Data Stored In:
+Table	Purpose
+payments	Payment records per order
+writer_wallets	Current writer balance
+transactions	Complete payment history
+payout_requests	If writer requests withdrawal
+Payment Flow:
+1.	Order approved
+2.	System calculates writer earning
+3.	Adds earning to writer’s wallet
+4.	Writer may request payout
+5.	Admin approves payout
+6.	Funds sent to writer (Mpesa, bank, etc.)
+________________________________________
+✅ 5. WRITER RELATIONSHIP WITH MANAGERS
+Writers are assigned to one manager.
+This is stored as:
+writers.assigned_manager_id
+Manager can:
+•	View writers under them
+•	See their performance
+•	Assign them orders
+•	Approve/reject their submissions
+•	Communicate with writers
+•	Approve their payments
+•	Rate writer performance
+Relationship Structure:
+•	Manager (1) → Many Writers
+•	Writer (1) → One Manager
+•	Manager (1) → Many Orders
+•	Writer (1) → Many Orders
+Manager also controls:
+•	Training
+•	Verification
+•	Quality checks
+________________________________________
+✅ 6. WRITER RELATIONSHIP WITH ORDERS
+Writer Order Flow:
+1.	Writer sees available order
+2.	Writer bids
+3.	Manager/admin assigns them
+4.	Writer receives order
+5.	Writer submits work
+6.	Manager/admin reviews
+7.	If approved → writer gets paid
+8.	If revision → writer resubmits
+Database Relationship:
+•	writers.id → orders.assigned_writer_id
+•	orders.id → submissions.order_id
+•	orders.id → revisions.order_id
+________________________________________
+✅ 7. WRITER NOTIFICATIONS
+Writers receive notifications for:
+•	New available orders
+•	Bid accepted/rejected
+•	Order assigned
+•	Revision request
+•	Order approved
+•	Payment released
+•	Manager messages
+Notifications stored in:
+•	notifications table
+________________________________________
+✅ 8. WRITER ACCOUNT MANAGEMENT
+Writers can:
+•	Edit profile
+•	Update skills
+•	Change password
+•	Upload portfolio samples
+•	View history of orders & payments
+Admins can:
+•	Approve/deny writer accounts
+•	Suspend writers
+•	Edit writer details
+•	Reassign writers to different managers
+________________________________________
+✅ 9. SUMMARY OF KEY RELATIONSHIPS (Simplified)
+Writer → User
+•	1:1
+•	writer.id links to users.id
+Writer → Manager
+•	Many writers assigned to 1 manager
+Writer → Orders
+•	One writer can handle many orders
+•	One order has one writer assigned
+Writer → Bids
+•	One writer can place many bids
+Writer → Payments
+•	One writer has many payment records
+•	Has one wallet
+________________________________________
+✅ 10. SUMMARY OF KEY FUNCTIONS
+Function	Writer Action	Result
+Register	Sign up, verify	Writer account created
+Bid	Submit offer	Bid stored, manager reviews
+Receive Order	Manager assigns	Order moves to writer dashboard
+Work	Write & upload	Stored in submissions
+Submit Work	Click submit	Manager receives submission
+Revise	Edit work	Reupload during revision status
+Approve	Manager approves	Payment recorded
+Get Paid	Request payout	Admin releases funds
+Track Earnings	View wallet	Full payment history
+
