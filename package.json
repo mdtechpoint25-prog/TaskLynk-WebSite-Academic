@@ -9,7 +9,7 @@
         "build": "next build",
         "start": "next start -H 0.0.0.0 -p 5000",
         "lint": "next lint",
-        "db:push": "drizzle-kit push",
+        "db:push": "drizzle-kit push --config drizzle.config.ts",
         "db:generate": "drizzle-kit generate",
         "db:migrate": "drizzle-kit migrate",
         "setup-db": "tsx src/scripts/setup-database.ts"
@@ -51,6 +51,7 @@
         "@react-email/components": "^0.5.7",
         "@react-three/drei": "^10.4.4",
         "@react-three/fiber": "^9.0.0-alpha.8",
+        "@replit/object-storage": "^1.0.0",
         "@supabase/supabase-js": "^2.78.0",
         "@tabler/icons-react": "^3.35.0",
         "@tailwindcss/typography": "^0.5.19",
