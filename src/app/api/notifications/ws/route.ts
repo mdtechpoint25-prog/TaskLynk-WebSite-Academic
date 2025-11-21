@@ -1,50 +1,54 @@
 import { NextRequest } from 'next/server';
-
-// Store active WebSocket connections
-const connections = new Map<number, Set<WebSocket>>();
+import { registerClient, unregisterClient } from '@/lib/notifications-bus';
 
 export async function GET(request: NextRequest) {
-  // Check if this is a WebSocket upgrade request
-  if (request.headers.get('upgrade') !== 'websocket') {
-    return new Response('Expected WebSocket', { status: 400 });
-  }
-
-  // Note: Replit's environment may not support raw WebSocket upgrades
-  // This is a fallback implementation using Server-Sent Events (SSE) instead
-
   const userId = request.nextUrl.searchParams.get('userId');
 
   if (!userId) {
     return new Response('Missing userId', { status: 400 });
   }
 
-  // Return SSE stream instead
+  // Create SSE stream
   const responseStream = new ReadableStream({
     start(controller) {
       const encoder = new TextEncoder();
-
+      const clientId = `${userId}-${Date.now()}`;
+      
+      // Register connection in centralized bus
+      registerClient(clientId, controller);
+      
       // Send initial connection message
-      controller.enqueue(encoder.encode('data: {"type":"connected"}\n\n'));
+      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'connected', userId })}\n\n`));
 
       // Ping every 30 seconds to keep connection alive
       const pingInterval = setInterval(() => {
-        controller.enqueue(encoder.encode(': ping\n\n'));
+        try {
+          controller.enqueue(encoder.encode(': ping\n\n'));
+        } catch (error) {
+          clearInterval(pingInterval);
+          unregisterClient(clientId);
+        }
       }, 30000);
 
       // Cleanup on close
-      return () => {
+      request.signal.addEventListener('abort', () => {
         clearInterval(pingInterval);
-        controller.close();
-      };
+        unregisterClient(clientId);
+        try {
+          controller.close();
+        } catch (e) {
+          // Already closed
+        }
+      });
     },
   });
 
   return new Response(responseStream, {
     headers: {
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
-      'Access-Control-Allow-Origin': '*',
+      'X-Accel-Buffering': 'no',
     },
   });
 }

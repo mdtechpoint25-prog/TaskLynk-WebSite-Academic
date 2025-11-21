@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
 import { jobAttachments, jobs, users, notifications } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { broadcastNotification } from '@/lib/notifications-bus';
 
 // Allowed file formats (server-side validation)
 const ALLOWED_FORMATS = [
@@ -173,10 +174,9 @@ export async function POST(request: NextRequest) {
         const admins = await db
           .select()
           .from(users)
-          .where(eq(users.role, 'admin'))
-          .all();
+          .where(eq(users.role, 'admin'));
         
-        admins.forEach(admin => {
+        admins.forEach((admin: any) => {
           if (!usersToNotify.includes(admin.id)) {
             usersToNotify.push(admin.id);
           }
@@ -197,10 +197,10 @@ export async function POST(request: NextRequest) {
           fileTypeMessage = 'A revision file';
         }
 
-        // Create notifications for all users
+        // Create notifications for all users and broadcast in real-time
         for (const userId of filteredUsers) {
           try {
-            await db.insert(notifications).values({
+            const notification = {
               userId,
               jobId: job[0].id,
               type: 'file_uploaded',
@@ -208,7 +208,12 @@ export async function POST(request: NextRequest) {
               message: `${fileTypeMessage} "${file.name}" has been uploaded to order "${job[0].title}"`,
               read: false,
               createdAt: new Date().toISOString(),
-            });
+            };
+            
+            await db.insert(notifications).values(notification);
+            
+            // Broadcast real-time notification via centralized bus
+            broadcastNotification(userId, notification);
           } catch (notifError) {
             console.error(`Failed to create notification for user ${userId}:`, notifError);
           }
