@@ -31,7 +31,7 @@ function SubmitWorkContent() {
   const [submissionType, setSubmissionType] = useState<'draft' | 'final'>('final');
   const [content, setContent] = useState('');
   const [wordCount, setWordCount] = useState(0);
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
   const [loadingJob, setLoadingJob] = useState(true);
 
