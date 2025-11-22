@@ -241,7 +241,10 @@ export default function DonePage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

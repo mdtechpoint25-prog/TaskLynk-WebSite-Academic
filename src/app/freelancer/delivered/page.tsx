@@ -236,7 +236,10 @@ export default function DeliveredPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

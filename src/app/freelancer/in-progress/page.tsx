@@ -254,7 +254,10 @@ export default function InProgressPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

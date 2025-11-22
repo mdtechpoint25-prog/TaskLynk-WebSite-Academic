@@ -148,9 +148,12 @@ export default function ClientAcceptedPage() {
                         </div>
                       </div>
                     ))}
+                  </div>
                 )}
               </CardContent>
             </Card>
+          </div>
+        </main>
       </div>
     </div>
   );

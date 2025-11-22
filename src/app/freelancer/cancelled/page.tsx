@@ -236,7 +236,10 @@ export default function CancelledPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

@@ -155,9 +155,12 @@ export default function ClientPaidPage() {
                         </div>
                       </div>
                     ))}
+                  </div>
                 )}
               </CardContent>
             </Card>
+          </div>
+        </main>
       </div>
     </div>
   );

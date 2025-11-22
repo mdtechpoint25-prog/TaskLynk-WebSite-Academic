@@ -236,7 +236,10 @@ export default function CompletedPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

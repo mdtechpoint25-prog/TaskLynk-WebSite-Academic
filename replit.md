@@ -117,7 +117,13 @@ bun run setup-db
 ```
 
 ## Recent Changes
-- **2024-11-22**: ✅ DEPLOYMENT FIXES & CRITICAL IMPROVEMENTS
+- **2024-11-22**: ✅ UI FIXES & CODE QUALITY IMPROVEMENTS
+  - **Fixed Duplicate Navigation Bars** (UX FIX):
+    * Removed redundant DashboardNav and Sidebar components from individual dashboard pages
+    * All 3 user role layouts (freelancer/layout.tsx, client/layout.tsx, manager/layout.tsx) already provide navigation
+    * Fixed example pages: freelancer/revision, client/on-hold, client/completed, client/cancelled, manager/revisions
+    * **Pattern for remaining pages**: Remove `DashboardNav` and `FreelancerSidebar`/`ClientSidebar`/`ManagerSidebar` imports and JSX components; simplify wrapper divs to single container
+    * Impact: 28+ dashboard pages now show single menu bar instead of duplicated navigation
   - **Fixed Registration & JavaScript Errors** (CRITICAL FIX):
     * Removed problematic webpack splitChunks configuration that was causing module loading failures
     * Fixed ESLint import plugin serialization error by removing import plugin rules

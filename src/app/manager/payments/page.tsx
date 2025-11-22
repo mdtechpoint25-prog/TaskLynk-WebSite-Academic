@@ -188,9 +188,12 @@ export default function ManagerPaymentsPage() {
                       </div>
                     </div>
                   ))}
+                </div>
               )}
             </CardContent>
           </Card>
+        </div>
+      </main>
     </div>
   );
 }

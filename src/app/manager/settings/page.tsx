@@ -257,6 +257,9 @@ export default function ManagerSettingsPage() {
                 </Button>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

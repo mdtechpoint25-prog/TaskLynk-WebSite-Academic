@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
 import { LeftNav } from '@/components/left-nav';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -70,7 +69,6 @@ export default function ManagerApprovedOrdersPage() {
 
   return (
     <>
-      <DashboardNav />
       <LeftNav role="manager" userName={user.name} userRole={user.role} />
       <div className="min-h-screen bg-background ml-64">
         <div className="container mx-auto px-4 py-8">

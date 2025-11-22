@@ -280,9 +280,12 @@ export default function ClientDeliveredPage() {
                         </div>
                       );
                     })}
+                  </div>
                 )}
               </CardContent>
             </Card>
+          </div>
+        </main>
       </div>
     </div>
   );

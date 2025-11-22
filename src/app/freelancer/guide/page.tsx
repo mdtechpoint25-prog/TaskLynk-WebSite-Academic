@@ -123,7 +123,10 @@ export default function FreelancerGuidePage() {
               <Link href="/freelancer/financial-overview" className="flex items-center justify-between rounded-md border px-4 py-3 hover:bg-muted transition">
                 Financial Overview <ArrowRight className="h-4 w-4" />
               </Link>
+            </div>
           </section>
+        </div>
+      </main>
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
 import { LeftNav } from '@/components/left-nav';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -77,7 +76,6 @@ export default function ManagerOnHoldWritersPage() {
 
   return (
     <>
-      <DashboardNav />
       <LeftNav 
         role="manager" 
         userName={user.name} 

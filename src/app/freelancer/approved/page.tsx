@@ -217,7 +217,10 @@ export default function ApprovedPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

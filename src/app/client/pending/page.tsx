@@ -177,6 +177,8 @@ export default function PendingJobsPage() {
             <Link href="/client/dashboard">
               <Button variant="outline">Back to Dashboard</Button>
             </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

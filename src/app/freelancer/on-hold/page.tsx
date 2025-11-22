@@ -122,8 +122,6 @@ export default function OnHoldPage() {
   return (
     <div className="w-full">
     <div className="min-h-screen flex bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
         <div className="p-3 md:p-4 lg:p-5 w-full">
@@ -236,7 +234,10 @@ export default function OnHoldPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

@@ -241,9 +241,12 @@ export default function EditingPage() {
                       })}
                     </TableBody>
                   </Table>
+                </div>
               </CardContent>
             </Card>
           )}
+        </div>
+      </main>
     </div>
   );
 }
