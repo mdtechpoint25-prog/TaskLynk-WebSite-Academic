@@ -3,8 +3,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RotateCcw, FileText, Search } from 'lucide-react';
@@ -51,7 +49,6 @@ type Job = {
 export default function RevisionPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
 
@@ -121,12 +118,7 @@ export default function RevisionPage() {
   }
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
-        <div className="p-3 md:p-4 lg:p-5 w-full">
+    <div className="w-full">
           <div className="mb-8">
             <h1 className="text-2xl font-bold mb-2">Revision</h1>
             <p className="text-sm text-muted-foreground">
@@ -237,8 +229,6 @@ export default function RevisionPage() {
               </Table>
             </div>
           )}
-        </div>
-      </main>
     </div>
   );
 }

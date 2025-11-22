@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { ClientSidebar } from '@/components/client-sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,7 +29,6 @@ export default function ClientRevisionsPage() {
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const fetchJobs = async () => {
     if (!user) return;

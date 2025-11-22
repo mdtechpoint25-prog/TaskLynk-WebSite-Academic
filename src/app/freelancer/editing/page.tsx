@@ -3,8 +3,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Edit, FileText, Search } from 'lucide-react';
@@ -51,7 +49,6 @@ type Job = {
 export default function EditingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
 

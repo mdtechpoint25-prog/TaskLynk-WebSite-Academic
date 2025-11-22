@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { ManagerSidebar } from '@/components/manager-sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Users, Star, Award } from 'lucide-react';
@@ -33,7 +31,6 @@ type PerformanceData = {
 export default function ManagerPerformancePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
   const [loadingData, setLoadingData] = useState(true);
 

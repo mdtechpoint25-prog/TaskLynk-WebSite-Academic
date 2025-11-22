@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { ClientSidebar } from '@/components/client-sidebar';
 import { ChatWithUsWidget } from '@/components/chat-with-us-widget';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -38,7 +36,6 @@ export default function ClientDeliveredPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const fetchJobs = async (silent = false) => {
     if (!user) return;

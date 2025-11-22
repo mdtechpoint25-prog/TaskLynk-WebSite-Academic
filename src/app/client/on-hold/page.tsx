@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { ClientSidebar } from '@/components/client-sidebar';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PauseCircle } from 'lucide-react';
@@ -26,7 +24,6 @@ export default function ClientOnHoldPage() {
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (!loading) {
@@ -72,13 +69,7 @@ export default function ClientOnHoldPage() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <div className="flex h-[calc(100vh-64px)]">
-        <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        
-        <main className="flex-1 overflow-y-auto">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
             <div className="mb-6">
               <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
                 <PauseCircle className="w-8 h-8 text-amber-600" />
@@ -150,9 +141,6 @@ export default function ClientOnHoldPage() {
                 )}
               </CardContent>
             </Card>
-          </div>
-        </main>
-      </div>
     </div>
   );
 }

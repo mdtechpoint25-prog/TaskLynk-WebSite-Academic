@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { ManagerSidebar } from '@/components/manager-sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare } from 'lucide-react';
@@ -29,7 +27,6 @@ export default function ManagerMessagesPage() {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loadingMessages, setLoadingMessages] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Unread overview and per-order indicators
   const [unreadOverview, setUnreadOverview] = useState<number | null>(null);

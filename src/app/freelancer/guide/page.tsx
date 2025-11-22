@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { DashboardNav } from "@/components/dashboard-nav";
-import { FreelancerSidebar } from "@/components/freelancer-sidebar";
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, Info, ListChecks, Workflow } from "lucide-react";
 
 export default function FreelancerGuidePage() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     <div className="min-h-screen flex bg-background">

@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { ManagerSidebar } from '@/components/manager-sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RefreshCw, Clock } from 'lucide-react';
@@ -26,7 +24,6 @@ type Job = {
 export default function ManagerRevisionsPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [revisions, setRevisions] = useState<Job[]>([]);
   const [loadingRevisions, setLoadingRevisions] = useState(true);
 
@@ -68,13 +65,8 @@ export default function ManagerRevisionsPage() {
   }
 
   return (
-    <div className="dashboard-container">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <ManagerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <main className="dashboard-main">
-        <div className="dashboard-inner">
-          <div className="mb-6 sm:mb-8">
+    <div className="w-full">
+      <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Revision Requests</h1>
             <p className="text-sm sm:text-base text-muted-foreground">
               Track and manage orders in revision stage
@@ -167,8 +159,6 @@ export default function ManagerRevisionsPage() {
               )}
             </CardContent>
           </Card>
-        </div>
-      </main>
     </div>
   );
 }
