@@ -5,12 +5,13 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Send, FileText, Search } from 'lucide-react';
+import { Clock, FileText, Search, AlertCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { calculateFreelancerAmount } from '@/lib/payment-calculations';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Select,
   SelectContent,
@@ -46,7 +47,7 @@ type Job = {
   createdAt: string;
 };
 
-export default function DeliveredPage() {
+export default function InProgressPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -81,6 +82,7 @@ export default function DeliveredPage() {
     
     setLoadingJobs(true);
     try {
+      // CRITICAL: Only fetch jobs assigned to current freelancer
       const response = await fetch(`/api/jobs?assignedFreelancerId=${user.id}`);
       if (response.ok) {
         const data = await response.json();
@@ -93,8 +95,9 @@ export default function DeliveredPage() {
     }
   };
 
+  // CRITICAL: Only show jobs with status 'in_progress'
   const filteredJobs = useMemo(() => {
-    return jobs.filter(j => j.status === 'delivered');
+    return jobs.filter(j => j.status === 'in_progress');
   }, [jobs]);
 
   const applyFilters = (list: Job[]) => {
@@ -126,22 +129,31 @@ export default function DeliveredPage() {
       <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
       <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
-        <div className="p-3 md:p-4 lg:p-5 w-full">
+        <div className="p-3 md:p-4 lg:p-5 w-full max-w-full overflow-x-hidden">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-2">Delivered</h1>
+            <h1 className="text-2xl font-bold mb-2">In Progress</h1>
             <p className="text-sm text-muted-foreground">
-              Orders successfully delivered to the client. Monitor for client approval or revision requests.
+              Track ongoing projects currently under your work. Update files, request feedback, and ensure timely delivery.
             </p>
           </div>
+
+          {/* Workflow Info Alert */}
+          <Alert className="mb-6 bg-green-50 dark:bg-green-950 border-green-200">
+            <AlertCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription>
+              <strong>Active Jobs:</strong> These are jobs assigned to you by admin. Complete and submit them before the deadline. Once submitted, they move to "Delivered" status.
+            </AlertDescription>
+          </Alert>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Delivered Orders</CardTitle>
-                <Send className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">In Progress Orders</CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{filteredJobs.length}</div>
+                <div className="text-2xl font-bold text-blue-600">{filteredJobs.length}</div>
+                <p className="text-xs text-muted-foreground mt-1">Active assignments</p>
               </CardContent>
             </Card>
           </div>
@@ -191,7 +203,13 @@ export default function DeliveredPage() {
             <Card>
               <CardContent className="text-center py-12">
                 <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No delivered orders</p>
+                <p className="text-muted-foreground">No orders in progress</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {filteredJobs.length === 0 ? 
+                    'No active assignments yet. Check "Available Orders" to place bids.' :
+                    'No orders match your filters'
+                  }
+                </p>
               </CardContent>
             </Card>
           ) : (
@@ -219,24 +237,27 @@ export default function DeliveredPage() {
                         <TableCell className="font-mono text-sm text-primary font-semibold">{job.displayId || `#${job.id}`}</TableCell>
                         <TableCell className="max-w-[320px] truncate">{job.title}</TableCell>
                         <TableCell className="hidden md:table-cell capitalize">{job.workType}</TableCell>
-                        <TableCell className="hidden md:table-cell text-right text-green-600">KSh {earnings.toFixed(2)}</TableCell>
+                        <TableCell className="hidden md:table-cell text-right text-green-600 font-semibold">KSh {earnings.toFixed(2)}</TableCell>
                         <TableCell className="hidden md:table-cell text-center">{job.pages || '-'}</TableCell>
                         <TableCell className="hidden md:table-cell text-center">{job.slides || '-'}</TableCell>
                         <TableCell className="hidden lg:table-cell">{format(new Date(job.freelancerDeadline), 'MMM dd, yyyy HH:mm')}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary" className="capitalize">
-                            Delivered
+                          <Badge variant="outline" className="capitalize bg-blue-50 text-blue-700 border-blue-300">
+                            In Progress
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Link href={`/freelancer/jobs/${job.id}`} className="text-primary hover:underline">View</Link>
+                          <Link href={`/freelancer/jobs/${job.id}`} className="text-primary hover:underline font-medium">Work</Link>
                         </TableCell>
                       </TableRow>
                     );
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

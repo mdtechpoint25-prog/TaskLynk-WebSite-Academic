@@ -250,9 +250,12 @@ export default function ManagerMessagesPage() {
                       )}
                     </div>
                   ))}
+                </div>
               )}
             </CardContent>
           </Card>
+        </div>
+      </main>
     </div>
   );
 }

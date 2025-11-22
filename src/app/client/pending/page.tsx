@@ -76,6 +76,7 @@ export default function PendingJobsPage() {
 
   if (loading || !user) {
     return (
+    
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -83,6 +84,7 @@ export default function PendingJobsPage() {
   }
 
   return (
+    
     <div className="min-h-screen bg-background">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -175,8 +177,6 @@ export default function PendingJobsPage() {
             <Link href="/client/dashboard">
               <Button variant="outline">Back to Dashboard</Button>
             </Link>
-          </div>
-        </div>
       </div>
     </div>
   );

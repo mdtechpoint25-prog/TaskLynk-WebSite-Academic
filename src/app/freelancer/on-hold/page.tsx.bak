@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Send, FileText, Search } from 'lucide-react';
+import { Pause, FileText, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
@@ -46,7 +46,7 @@ type Job = {
   createdAt: string;
 };
 
-export default function DeliveredPage() {
+export default function OnHoldPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -94,7 +94,7 @@ export default function DeliveredPage() {
   };
 
   const filteredJobs = useMemo(() => {
-    return jobs.filter(j => j.status === 'delivered');
+    return jobs.filter(j => j.status === 'on_hold' || j.status === 'on-hold');
   }, [jobs]);
 
   const applyFilters = (list: Job[]) => {
@@ -128,17 +128,17 @@ export default function DeliveredPage() {
       <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
         <div className="p-3 md:p-4 lg:p-5 w-full">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-2">Delivered</h1>
+            <h1 className="text-2xl font-bold mb-2">On Hold</h1>
             <p className="text-sm text-muted-foreground">
-              Orders successfully delivered to the client. Monitor for client approval or revision requests.
+              View orders temporarily paused or awaiting clarification from admin or client before proceeding.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Delivered Orders</CardTitle>
-                <Send className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">On Hold Orders</CardTitle>
+                <Pause className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{filteredJobs.length}</div>
@@ -191,7 +191,7 @@ export default function DeliveredPage() {
             <Card>
               <CardContent className="text-center py-12">
                 <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No delivered orders</p>
+                <p className="text-muted-foreground">No orders on hold</p>
               </CardContent>
             </Card>
           ) : (
@@ -224,8 +224,8 @@ export default function DeliveredPage() {
                         <TableCell className="hidden md:table-cell text-center">{job.slides || '-'}</TableCell>
                         <TableCell className="hidden lg:table-cell">{format(new Date(job.freelancerDeadline), 'MMM dd, yyyy HH:mm')}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary" className="capitalize">
-                            Delivered
+                          <Badge variant="outline" className="capitalize">
+                            On Hold
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
@@ -236,7 +236,10 @@ export default function DeliveredPage() {
                   })}
                 </TableBody>
               </Table>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

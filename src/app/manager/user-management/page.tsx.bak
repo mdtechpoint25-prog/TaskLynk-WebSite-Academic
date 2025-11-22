@@ -313,9 +313,12 @@ export default function ManagerUserManagementPage() {
                       </div>
                     </div>
                   ))}
+                </div>
               )}
             </CardContent>
           </Card>
+        </div>
+      </main>
     </div>
   );
 }

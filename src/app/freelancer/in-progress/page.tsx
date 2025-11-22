@@ -71,7 +71,8 @@ export default function InProgressPage() {
           fetchJobs();
         }, 10000);
         
-        return () => clearInterval(interval);
+        return (
+    <div className="w-full">) => clearInterval(interval);
       }
     }
   }, [user, loading, router]);
@@ -114,6 +115,7 @@ export default function InProgressPage() {
 
   if (loading || !user) {
     return (
+    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -121,6 +123,7 @@ export default function InProgressPage() {
   }
 
   return (
+    <div className="w-full">
     <div className="min-h-screen flex bg-background">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -229,6 +232,7 @@ export default function InProgressPage() {
                   {displayedJobs.map((job) => {
                     const earnings = calculateFreelancerAmount(job.amount);
                     return (
+    <div className="w-full">
                       <TableRow key={job.id} className="hover:bg-muted/30">
                         <TableCell className="font-mono text-sm text-primary font-semibold">{job.displayId || `#${job.id}`}</TableCell>
                         <TableCell className="max-w-[320px] truncate">{job.title}</TableCell>
@@ -250,10 +254,7 @@ export default function InProgressPage() {
                   })}
                 </TableBody>
               </Table>
-            </div>
           )}
-        </div>
-      </main>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { ChatWithUsWidget } from '@/components/chat-with-us-widget';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Receipt, RefreshCw } from 'lucide-react';
+import { BadgeCheck, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
@@ -23,10 +23,9 @@ type Job = {
   deadline: string;
   actualDeadline: string;
   createdAt: string;
-  paymentConfirmed: boolean;
 };
 
-export default function ClientPaidPage() {
+export default function ClientAcceptedPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -37,8 +36,7 @@ export default function ClientPaidPage() {
     if (!user) return;
     if (!silent) setRefreshing(true);
     try {
-      // Fetch completed orders and filter for payment confirmed on frontend
-      const response = await fetch(`/api/jobs?clientId=${user.id}&status=completed&_t=${Date.now()}`, {
+      const response = await fetch(`/api/jobs?clientId=${user.id}&status=accepted&_t=${Date.now()}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -47,11 +45,9 @@ export default function ClientPaidPage() {
       });
       if (response.ok) {
         const data = await response.json();
-        // Filter to only show orders where payment has been confirmed by admin
-        const paidOrders = data.filter((job: Job) => job.paymentConfirmed === true);
-        setJobs(paidOrders);
+        setJobs(data);
       } else if (!silent) {
-        toast.error('Failed to fetch paid orders');
+        toast.error('Failed to fetch accepted orders');
       }
     } catch (e) {
       if (!silent) toast.error('Network error');
@@ -63,7 +59,7 @@ export default function ClientPaidPage() {
 
   useEffect(() => {
     if (!loading) {
-      // Allow both clients and account owners; only gate approval for regular clients
+      // Allow both clients and account owners
       if (!user || (user.role !== 'client' && user.role !== 'account_owner')) {
         router.push('/');
       } else if (!user.approved && user.role !== 'account_owner') {
@@ -87,15 +83,15 @@ export default function ClientPaidPage() {
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-foreground flex items-center gap-3">
-                    <Receipt className="w-8 h-8 text-emerald-600" />
-                    Paid Orders
+                    <BadgeCheck className="w-8 h-8 text-cyan-600" />
+                    Accepted Orders
                   </h1>
                   <p className="text-base sm:text-lg text-muted-foreground">
-                    Orders with confirmed payments. You can download your final files.
+                    Orders you accepted. Awaiting payment confirmation by admin.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Button variant="outline" size="lg" onClick={() => { fetchJobs(false); toast.success('Refreshing paid orders...'); }} disabled={refreshing}>
+                  <Button variant="outline" size="lg" onClick={() => { fetchJobs(false); toast.success('Refreshing accepted orders...'); }} disabled={refreshing}>
                     <RefreshCw className={`w-5 h-5 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
                     Refresh
                   </Button>
@@ -108,22 +104,22 @@ export default function ClientPaidPage() {
 
             <Card className="shadow-lg border-2">
               <CardHeader>
-                <CardTitle className="text-2xl">Paid Orders</CardTitle>
-                <CardDescription className="text-base">These orders are fully paid and finalized</CardDescription>
+                <CardTitle className="text-2xl">Accepted Orders</CardTitle>
+                <CardDescription className="text-base">These orders are accepted and pending payment confirmation</CardDescription>
               </CardHeader>
               <CardContent>
                 {loadingJobs ? (
                   <div className="text-center py-16">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-                    <p className="text-muted-foreground mt-4">Loading paid orders...</p>
+                    <p className="text-muted-foreground mt-4">Loading accepted orders...</p>
                   </div>
                 ) : jobs.length === 0 ? (
                   <div className="text-center py-16 bg-muted/30 rounded-lg">
-                    <Receipt className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium text-foreground mb-2">No paid orders</p>
-                    <p className="text-muted-foreground mb-6">Paid orders will appear here after admin payment confirmation</p>
-                    <Link href="/client/accepted">
-                      <Button variant="outline" size="lg">View Accepted Orders</Button>
+                    <BadgeCheck className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium text-foreground mb-2">No accepted orders</p>
+                    <p className="text-muted-foreground mb-6">Accepted orders will appear here</p>
+                    <Link href="/client/delivered">
+                      <Button variant="outline" size="lg">Review Delivered Orders</Button>
                     </Link>
                   </div>
                 ) : (
@@ -139,7 +135,7 @@ export default function ClientPaidPage() {
                               )}
                             </div>
                           </div>
-                          <Badge variant="default" className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm whitespace-nowrap">Paid</Badge>
+                          <Badge variant="secondary" className="text-cyan-700 bg-cyan-100 font-semibold text-sm whitespace-nowrap">Accepted</Badge>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
                           <span className="capitalize font-medium">{job.workType}</span>
@@ -150,14 +146,14 @@ export default function ClientPaidPage() {
                           <span>•</span>
                           <span>Posted: {new Date(job.createdAt).toLocaleDateString()}</span>
                         </div>
-                        <div className="mt-2 text-xs text-muted-foreground">
-                          Payment confirmed. <Link href="/client/accepted" className="underline hover:text-primary">View accepted orders</Link>
-                        </div>
                       </div>
                     ))}
+                  </div>
                 )}
               </CardContent>
             </Card>
+          </div>
+        </main>
       </div>
     </div>
   );

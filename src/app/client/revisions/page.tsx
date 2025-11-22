@@ -82,6 +82,7 @@ export default function ClientRevisionsPage() {
 
   if (loading || !user) {
     return (
+    
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -89,6 +90,7 @@ export default function ClientRevisionsPage() {
   }
 
   return (
+    
     <div className="min-h-screen bg-background">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -187,8 +189,6 @@ export default function ClientRevisionsPage() {
             <Link href="/client/dashboard">
               <Button variant="outline">Back to Dashboard</Button>
             </Link>
-          </div>
-        </div>
       </div>
     </div>
   );

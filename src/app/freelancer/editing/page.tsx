@@ -70,7 +70,8 @@ export default function EditingPage() {
           fetchJobs();
         }, 10000);
         
-        return () => clearInterval(interval);
+        return (
+    <div className="w-full">) => clearInterval(interval);
       }
     }
   }, [user, loading, router]);
@@ -111,6 +112,7 @@ export default function EditingPage() {
 
   if (loading || !user) {
     return (
+    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -118,12 +120,13 @@ export default function EditingPage() {
   }
 
   return (
+    <div className="w-full">
     <div className="dashboard-container">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      <main className="dashboard-main">
-        <div className="dashboard-inner">
+      
+        
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Editing</h1>
             <p className="text-sm sm:text-base text-muted-foreground">
@@ -216,6 +219,7 @@ export default function EditingPage() {
                       {displayedJobs.map((job) => {
                         const earnings = calculateFreelancerAmount(job.amount);
                         return (
+    <div className="w-full">
                           <TableRow key={job.id} className="hover:bg-muted/30">
                             <TableCell className="font-mono text-sm text-primary font-semibold">{job.displayId || `#${job.id}`}</TableCell>
                             <TableCell className="max-w-[320px] truncate">{job.title}</TableCell>
@@ -237,12 +241,9 @@ export default function EditingPage() {
                       })}
                     </TableBody>
                   </Table>
-                </div>
               </CardContent>
             </Card>
           )}
-        </div>
-      </main>
     </div>
   );
 }

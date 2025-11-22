@@ -179,6 +179,8 @@ export default function InProgressJobsPage() {
             <Link href="/client/dashboard">
               <Button variant="outline">Back to Dashboard</Button>
             </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -235,7 +235,10 @@ export default function ManagerPerformancePage() {
                   )}
                 </CardContent>
               </Card>
+            </div>
           )}
+        </div>
+      </main>
     </div>
   );
 }

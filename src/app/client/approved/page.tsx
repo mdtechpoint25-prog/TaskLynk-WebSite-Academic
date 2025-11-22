@@ -71,13 +71,14 @@ export default function ClientAcceptedPage() {
   }, [user, loading, router]);
 
   return (
+    
     <div className="min-h-screen flex flex-col bg-background">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <div className="flex flex-1 overflow-hidden">
         <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className="flex-1 overflow-y-auto">
+        
           <ChatWithUsWidget />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
+          
             <div className="mb-8">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
@@ -147,12 +148,9 @@ export default function ClientAcceptedPage() {
                         </div>
                       </div>
                     ))}
-                  </div>
                 )}
               </CardContent>
             </Card>
-          </div>
-        </main>
       </div>
     </div>
   );

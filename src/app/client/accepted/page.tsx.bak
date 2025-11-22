@@ -163,6 +163,8 @@ export default function ClientAcceptedOrdersPage() {
                 )}
               </CardContent>
             </Card>
+          </div>
+        </div>
       </div>
     </>
   );
