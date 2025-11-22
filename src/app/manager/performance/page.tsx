@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Users, Star, Award } from 'lucide-react';
 import Link from 'next/link';
+import { DashboardNav } from '@/components/dashboard-nav';
+import { ManagerSidebar } from '@/components/manager-sidebar';
 
 type PerformanceData = {
   freelancers: Array<{
@@ -32,6 +34,7 @@ export default function ManagerPerformancePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -72,7 +75,6 @@ export default function ManagerPerformancePage() {
 
   if (loading || !user) {
     return (
-    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -88,13 +90,12 @@ export default function ManagerPerformancePage() {
     .slice(0, 10) || [];
 
   return (
-    <div className="w-full">
-    
+    <div className="dashboard-container">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <ManagerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      
-        
+      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
+        <div className="p-3 md:p-4 lg:p-5 w-full">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Performance Analytics</h1>
             <p className="text-sm sm:text-base text-muted-foreground">

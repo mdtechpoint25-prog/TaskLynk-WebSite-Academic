@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Users, UserCheck, UserX, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { DashboardNav } from '@/components/dashboard-nav';
+import { ManagerSidebar } from '@/components/manager-sidebar';
 
 type User = {
   id: number;
@@ -29,6 +31,7 @@ export default function ManagerUserManagementPage() {
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -101,7 +104,6 @@ export default function ManagerUserManagementPage() {
 
   if (loading || !user) {
     return (
-    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -128,13 +130,12 @@ export default function ManagerUserManagementPage() {
   };
 
   return (
-    <div className="w-full">
-    
+    <div className="dashboard-container">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <ManagerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      
-        
+      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
+        <div className="p-3 md:p-4 lg:p-5 w-full">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">User Management</h1>
             <p className="text-sm sm:text-base text-muted-foreground">

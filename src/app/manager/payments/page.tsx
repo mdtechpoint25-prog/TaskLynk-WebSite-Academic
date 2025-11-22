@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DollarSign, TrendingUp, Users, Receipt } from 'lucide-react';
 import { format } from 'date-fns';
+import { DashboardNav } from '@/components/dashboard-nav';
+import { ManagerSidebar } from '@/components/manager-sidebar';
 
 type Payment = {
   id: number;
@@ -25,6 +27,7 @@ export default function ManagerPaymentsPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingPayments, setLoadingPayments] = useState(true);
 
   useEffect(() => {
@@ -58,7 +61,6 @@ export default function ManagerPaymentsPage() {
 
   if (loading || !user) {
     return (
-    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -71,13 +73,12 @@ export default function ManagerPaymentsPage() {
   const pendingPayments = payments.filter(p => p.status === 'pending').length;
 
   return (
-    <div className="w-full">
-    
+    <div className="dashboard-container">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <ManagerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      
-        
+      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
+        <div className="p-3 md:p-4 lg:p-5 w-full">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Payment Management</h1>
             <p className="text-sm sm:text-base text-muted-foreground">

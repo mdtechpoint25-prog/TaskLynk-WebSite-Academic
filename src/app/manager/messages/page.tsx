@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { DashboardNav } from '@/components/dashboard-nav';
+import { ManagerSidebar } from '@/components/manager-sidebar';
 
 type Message = {
   id: number;
@@ -26,6 +28,7 @@ export default function ManagerMessagesPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(true);
 
   // Unread overview and per-order indicators
@@ -117,7 +120,6 @@ export default function ManagerMessagesPage() {
 
   if (loading || !user) {
     return (
-    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -127,13 +129,12 @@ export default function ManagerMessagesPage() {
   const approvedMessages = messages.filter(m => m.adminApproved);
 
   return (
-    <div className="w-full">
-    
+    <div className="dashboard-container">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <ManagerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      
-        
+      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
+        <div className="p-3 md:p-4 lg:p-5 w-full">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Messages</h1>
             <p className="text-sm sm:text-base text-muted-foreground">
