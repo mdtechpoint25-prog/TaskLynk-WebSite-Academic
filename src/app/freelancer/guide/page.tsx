@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, Info, ListChecks, Workflow } from "lucide-react";
+import { DashboardNav } from '@/components/dashboard-nav';
+import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 
 export default function FreelancerGuidePage() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="w-full">
     <div className="min-h-screen flex bg-background">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />

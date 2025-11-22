@@ -26,6 +26,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DashboardNav } from '@/components/dashboard-nav';
+import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 
 type Job = {
   id: number;
@@ -50,6 +52,7 @@ export default function EditingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(true);
 
   const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
@@ -70,8 +73,7 @@ export default function EditingPage() {
           fetchJobs();
         }, 10000);
         
-        return (
-    <div className="w-full">) => clearInterval(interval);
+        return () => clearInterval(interval);
       }
     }
   }, [user, loading, router]);
@@ -112,7 +114,6 @@ export default function EditingPage() {
 
   if (loading || !user) {
     return (
-    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -120,13 +121,12 @@ export default function EditingPage() {
   }
 
   return (
-    <div className="w-full">
     <div className="dashboard-container">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      
-        
+      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
+        <div className="p-3 md:p-4 lg:p-5 w-full">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Editing</h1>
             <p className="text-sm sm:text-base text-muted-foreground">
@@ -219,7 +219,6 @@ export default function EditingPage() {
                       {displayedJobs.map((job) => {
                         const earnings = calculateFreelancerAmount(job.amount);
                         return (
-    <div className="w-full">
                           <TableRow key={job.id} className="hover:bg-muted/30">
                             <TableCell className="font-mono text-sm text-primary font-semibold">{job.displayId || `#${job.id}`}</TableCell>
                             <TableCell className="max-w-[320px] truncate">{job.title}</TableCell>

@@ -26,11 +26,33 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { DashboardNav } from '@/components/dashboard-nav';
+import { FreelancerSidebar } from '@/components/freelancer-sidebar';
+
+type Job = {
+  id: number;
+  clientId: number;
+  displayId: string;
+  title: string;
+  instructions: string;
+  workType: string;
+  pages: number | null;
+  slides: number | null;
+  amount: number;
+  deadline: string;
+  actualDeadline: string;
+  freelancerDeadline: string;
+  status: string;
+  assignedFreelancerId: number | null;
+  adminApproved: boolean;
+  createdAt: string;
+};
 
 export default function ApprovedPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(true);
 
   const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
@@ -51,8 +73,7 @@ export default function ApprovedPage() {
           fetchJobs();
         }, 10000);
         
-        return (
-    <div className="w-full">) => clearInterval(interval);
+        return () => clearInterval(interval);
       }
     }
   }, [user, loading, router]);
@@ -93,7 +114,6 @@ export default function ApprovedPage() {
 
   if (loading || !user) {
     return (
-    <div className="w-full">
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -101,7 +121,6 @@ export default function ApprovedPage() {
   }
 
   return (
-    <div className="w-full">
     <div className="min-h-screen flex bg-background">
       <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
       <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -195,7 +214,6 @@ export default function ApprovedPage() {
                   {displayedJobs.map((job) => {
                     const earnings = calculateFreelancerAmount(job.amount);
                     return (
-    <div className="w-full">
                       <TableRow key={job.id} className="hover:bg-muted/30">
                         <TableCell className="font-mono text-sm text-primary font-semibold">{job.displayId || `#${job.id}`}</TableCell>
                         <TableCell className="max-w-[320px] truncate">{job.title}</TableCell>
