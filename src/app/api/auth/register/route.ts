@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { db } from '@/db';
 import { pendingRegistrations } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import { sendEmail, getEmailVerificationHTML } from '@/lib/email';
 
-export async function POST(request: NextRequest) {
+// Use standard Request instead of NextRequest (works better with Bun)
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, password, name, role, phone, account_name, accountName } = body;
@@ -157,10 +158,15 @@ export async function POST(request: NextRequest) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Registration error details:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
+    });
     return NextResponse.json({ 
       error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: error instanceof Error ? error.message : String(error)
     }, { status: 500 });
   }
 }
