@@ -86,14 +86,8 @@ export default function InProgressJobsPage() {
   }
 
   return (
-    
-    <div className="min-h-screen bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <div className="lg:ml-64 pt-[72px]">
-        <div className="p-4 md:p-6">
-          <div className="mb-6">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
+      <div className="mb-6">
             <h1 className="text-2xl font-bold mb-2">In Progress Orders</h1>
             <p className="text-sm text-muted-foreground">Orders currently being worked on by writers</p>
           </div>
@@ -175,12 +169,10 @@ export default function InProgressJobsPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-6 text-center">
-            <Link href="/client/dashboard">
-              <Button variant="outline">Back to Dashboard</Button>
-            </Link>
-          </div>
-        </div>
+      <div className="mt-6 text-center">
+        <Link href="/client/dashboard">
+          <Button variant="outline">Back to Dashboard</Button>
+        </Link>
       </div>
     </div>
   );

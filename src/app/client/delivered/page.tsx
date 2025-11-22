@@ -109,7 +109,6 @@ export default function ClientDeliveredPage() {
 
   if (loading || !user) {
     return (
-    
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -117,16 +116,10 @@ export default function ClientDeliveredPage() {
   }
 
   return (
-    
-    <div className="min-h-screen flex flex-col bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <div className="flex flex-1 overflow-hidden">
-        <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        
-        
-          <ChatWithUsWidget />
-          
-            <div className="mb-8">
+    <>
+      <ChatWithUsWidget />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
+        <div className="mb-8">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-foreground flex items-center gap-3">
@@ -284,9 +277,7 @@ export default function ClientDeliveredPage() {
                 )}
               </CardContent>
             </Card>
-          </div>
-        </main>
       </div>
-    </div>
+    </>
   );
 }

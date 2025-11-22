@@ -110,7 +110,6 @@ export default function ClientAcceptedOrdersPage() {
 
   if (loading || !user) {
     return (
-    
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
       </div>
@@ -118,14 +117,8 @@ export default function ClientAcceptedOrdersPage() {
   }
 
   return (
-    
-    <>
-      <DashboardNav />
-      <div className="flex min-h-screen bg-background">
-        <ClientSidebar />
-        <div className="flex-1">
-          
-            <div className="mb-8">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
+      <div className="mb-8">
               <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
                 <BadgeCheck className="w-6 h-6 text-cyan-600" /> Accepted Orders
               </h1>
@@ -163,9 +156,6 @@ export default function ClientAcceptedOrdersPage() {
                 )}
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
