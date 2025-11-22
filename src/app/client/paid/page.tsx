@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { DashboardNav } from '@/components/dashboard-nav';
 import { ClientSidebar } from '@/components/client-sidebar';
-import { FloatingContact } from '@/components/floating-contact';
+import { ChatWithUsWidget } from '@/components/chat-with-us-widget';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -83,7 +83,7 @@ export default function ClientPaidPage() {
       <div className="flex flex-1 overflow-hidden">
         <ClientSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="flex-1 overflow-y-auto">
-          <FloatingContact />
+          <ChatWithUsWidget />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
             <div className="mb-8">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">

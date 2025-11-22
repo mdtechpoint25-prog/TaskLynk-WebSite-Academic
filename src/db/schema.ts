@@ -293,6 +293,20 @@ export const messages = pgTable('messages', {
   createdAt: text('created_at').notNull(),
 });
 
+// Contact Messages (from "Chat with Us" widget - guest or user messages)
+export const contactMessages = pgTable('contact_messages', {
+  id: serial('id').primaryKey(),
+  senderName: text('sender_name').notNull(),
+  senderEmail: text('sender_email').notNull(),
+  senderPhone: text('sender_phone'),
+  content: text('content').notNull(),
+  status: text('status').notNull().default('pending'), // 'pending', 'read', 'resolved'
+  isGuest: boolean('is_guest').notNull().default(true),
+  resolvedBy: integer('resolved_by').references(() => users.id, { onDelete: 'set null' }),
+  resolvedAt: text('resolved_at'),
+  createdAt: text('created_at').notNull(),
+});
+
 // Revisions
 export const revisions = pgTable('revisions', {
   id: serial('id').primaryKey(),

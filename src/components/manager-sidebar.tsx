@@ -57,7 +57,8 @@ function ManagerSidebarContent({ isOpen, onClose }: ManagerSidebarContentProps) 
   const topItems: NavItem[] = [
     { href: "/manager/clients/all", label: "Clients", icon: Users },
     { href: "/manager/writers/all", label: "Writers", icon: UserCheck },
-    { href: "/manager/messages", label: "Messages", icon: MessageSquare, match: (p) => p.startsWith("/manager/messages") },
+    { href: "/manager/messages", label: "Job Messages", icon: MessageSquare, match: (p) => p.startsWith("/manager/messages") && !p.startsWith("/manager/contact-messages") },
+    { href: "/manager/contact-messages", label: "Contact Messages", icon: MessageSquare, match: (p) => p.startsWith("/manager/contact-messages") },
     { href: "/manager/payments", label: "Payments", icon: DollarSign },
     { href: "/manager/settings", label: "Settings", icon: Settings },
   ];

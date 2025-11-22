@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { DashboardNav } from '@/components/dashboard-nav';
-import { FloatingContact } from '@/components/floating-contact';
+import { ChatWithUsWidget } from '@/components/chat-with-us-widget';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -92,7 +92,7 @@ export default function ClientCancelledPage() {
   return (
     <div className="min-h-screen bg-background">
       <DashboardNav />
-      <FloatingContact />
+      <ChatWithUsWidget />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
         {/* Header */}
         <div className="mb-8">

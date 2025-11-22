@@ -117,6 +117,23 @@ bun run setup-db
 ```
 
 ## Recent Changes
+- **2024-11-22**: 🚧 CHAT WIDGET & PERFORMANCE IMPROVEMENTS (In Progress)
+  - **Chat with Us Widget**: New contact messaging system
+    * Created `ChatWithUsWidget` component replacing `FloatingContact`
+    * Added `contact_messages` table for guest/user inquiries
+    * Built `/api/contact-messages` endpoint with admin/manager auth
+    * Manager inbox at `/manager/contact-messages` to view/manage messages
+    * Security: GET/PATCH protected with role-based access control
+    * Note: Migration needs verification in fresh deployments
+  - **Performance Optimizations**:
+    * Enhanced Next.js config with compression, code splitting, optimized packages
+    * Added webpack splitChunks configuration for better bundle sizes
+    * Configured image optimization (WebP/AVIF formats)
+    * Note: Custom webpack config needs production testing
+  - **Updated Components**:
+    * Manager sidebar now includes "Contact Messages" link
+    * Client pages use new ChatWithUsWidget for better user experience
+    
 - **2024-11-21**: ✅ PRODUCTION-READY DEPLOYMENT COMPLETE
   - **Real-Time Notifications System** implemented with SSE:
     * Centralized notification bus (`src/lib/notifications-bus.ts`) with singleton pattern
