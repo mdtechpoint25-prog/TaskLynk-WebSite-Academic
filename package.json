@@ -6,7 +6,7 @@
     "dev": "next dev -H 0.0.0.0 -p 5000",
     "dev:turbo": "next dev --turbo -H 0.0.0.0 -p 5000",
     "dev:clean": "rm -rf .next && next dev -H 0.0.0.0 -p 5000",
-    "build": "NODE_ENV=production next build",
+    "build": "next build",
     "start": "next start -H 0.0.0.0 -p 5000",
     "lint": "next lint",
     "db:push": "drizzle-kit push --config drizzle.config.ts",
