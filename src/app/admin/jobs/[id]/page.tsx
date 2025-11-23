@@ -24,6 +24,9 @@ import { calculateWriterEarnings } from '@/lib/payment-calculations';
 type Job = {
   id: number;
   clientId: number;
+  clientName?: string;
+  clientEmail?: string;
+  clientPhone?: string;
   title: string;
   instructions: string;
   workType: string;
@@ -1265,6 +1268,37 @@ export default function AdminJobDetailPage() {
                   </div>
                 </div>
               )}
+
+              {/* Client Contact Information */}
+              <div className="mt-6 pt-6 border-t">
+                <Label className="text-sm text-muted-foreground font-semibold block mb-3">Client Contact Information</Label>
+                <div className="p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-900 space-y-2">
+                  {job.clientName && (
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-purple-900 dark:text-purple-100">Name:</p>
+                      <p className="text-sm text-purple-800 dark:text-purple-200">{job.clientName}</p>
+                    </div>
+                  )}
+                  {job.clientEmail && (
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-purple-900 dark:text-purple-100">Email:</p>
+                      <a href={`mailto:${job.clientEmail}`} className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                        <Mail className="w-3 h-3" />
+                        {job.clientEmail}
+                      </a>
+                    </div>
+                  )}
+                  {job.clientPhone && (
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-purple-900 dark:text-purple-100">Phone:</p>
+                      <a href={`tel:${job.clientPhone}`} className="text-sm text-blue-600 hover:underline flex items-center gap-1 font-medium">
+                        <Phone className="w-4 h-4" />
+                        {job.clientPhone}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
             </CardContent>
           </Card>
 

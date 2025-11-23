@@ -1,14 +1,21 @@
 /**
  * Centralized payment calculation functions for TaskLynk
  *
- * New model:
+ * OLD model (still used as fallback):
  * - Minimum client cost-per-page (CPP) = KSh 240 (validation handled server-side)
  * - Minimum client cost-per-slide (CPS) = KSh 150
  * - Writer CPP: default 200; technical orders = 270-350 (using 270 as base)
  * - Writer CPS (slides): 100
  * - Manager earnings: 10 on assign; on submit 10 + 5 * (pages - 1)
  * - Admin profit = client payment - (writer payout + manager payouts)
+ *
+ * NEW CPP LEVEL SYSTEM (Primary):
+ * - Freelancers progress through 5 tiers: Starter (150) → Rising (160) → Established (170) → Expert (180) → Master (200)
+ * - Technical work adds +20 CPP bonus across all tiers
+ * - Progress based on completed orders: 3 → 5 → 15 → 27 → ∞
  */
+
+import { getCurrentCPP, isWorkTypeTechnical } from './cpp-calculation';
 
 const TECHNICAL_KEYWORDS = [
   'excel',
@@ -105,6 +112,57 @@ export function calculateManagerEarnings(params: { assigned: boolean; submitted:
  */
 export function calculateFreelancerAmount(_clientPayment: number): number {
   return 0;
+}
+
+/**
+ * NEW CPP LEVEL SYSTEM - Calculate writer payout based on CPP tier
+ * @param pages Number of pages
+ * @param workType Type of work (determines if technical)
+ * @param completedOrders Number of orders the freelancer has completed (determines CPP level)
+ * @returns Calculated writer payout
+ */
+export function calculateWriterPayoutByCPPLevel(
+  pages: number | null | undefined,
+  workType: string | null | undefined,
+  completedOrders: number = 0
+): number {
+  const p = Math.max(0, Number(pages || 0));
+  const isTechnical = isWorkTypeTechnical(workType);
+  const cppRate = getCurrentCPP(completedOrders, isTechnical);
+  return Math.round(p * cppRate * 100) / 100;
+}
+
+/**
+ * NEW CPP LEVEL SYSTEM - Calculate total writer earnings (pages + slides) based on CPP tier
+ * @param pages Number of pages
+ * @param slides Number of slides
+ * @param workType Type of work (determines if technical)
+ * @param completedOrders Number of orders the freelancer has completed (determines CPP level)
+ * @returns Calculated total writer earnings
+ */
+export function calculateWriterEarningsByCPPLevel(
+  pages: number | null | undefined,
+  slides: number | null | undefined,
+  workType: string | null | undefined,
+  completedOrders: number = 0
+): number {
+  const p = Math.max(0, Number(pages || 0));
+  const s = Math.max(0, Number(slides || 0));
+  const isTechnical = isWorkTypeTechnical(workType);
+  const cppRate = getCurrentCPP(completedOrders, isTechnical);
+  const amount = p * cppRate + s * writerPerSlide();
+  return Math.round(amount * 100) / 100;
+}
+
+/**
+ * Get current CPP rate for a freelancer (wrapper for easier use)
+ */
+export function getFreelancerCPPRate(
+  workType: string | null | undefined,
+  completedOrders: number = 0
+): number {
+  const isTechnical = isWorkTypeTechnical(workType);
+  return getCurrentCPP(completedOrders, isTechnical);
 }
 
 /**

@@ -3,19 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, Info, ListChecks, Workflow } from "lucide-react";
-import { DashboardNav } from '@/components/dashboard-nav';
-import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 
 export default function FreelancerGuidePage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   return (
-    <div className="min-h-screen flex bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
-        <div className="p-3 md:p-4 lg:p-5 w-full">
+    <div className="w-full">
           <header>
             <h1 className="text-3xl font-bold tracking-tight">Freelancer Guide</h1>
             <p className="text-muted-foreground mt-1">How orders, bids, messaging, and delivery work on TaskLynk.</p>
@@ -127,8 +118,6 @@ export default function FreelancerGuidePage() {
               </Link>
             </div>
           </section>
-        </div>
-      </main>
     </div>
   );
 }

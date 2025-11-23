@@ -27,8 +27,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 
 type Job = {
   id: number;
@@ -53,7 +51,6 @@ export default function InProgressPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(true);
 
   const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
@@ -124,12 +121,7 @@ export default function InProgressPage() {
   }
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
-        <div className="p-3 md:p-4 lg:p-5 w-full max-w-full overflow-x-hidden">
+    <div className="w-full max-w-full overflow-x-hidden">
           <div className="mb-8">
             <h1 className="text-2xl font-bold mb-2">In Progress</h1>
             <p className="text-sm text-muted-foreground">
@@ -246,7 +238,7 @@ export default function InProgressPage() {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <Link href={`/freelancer/jobs/${job.id}`} className="text-primary hover:underline font-medium">Work</Link>
+                          <Link href={`/freelancer/jobs/${job.displayId || job.id}`} className="text-primary hover:underline font-medium">Work</Link>
                         </TableCell>
                       </TableRow>
                     );
@@ -255,8 +247,6 @@ export default function InProgressPage() {
               </Table>
             </div>
           )}
-        </div>
-      </main>
     </div>
   );
 }

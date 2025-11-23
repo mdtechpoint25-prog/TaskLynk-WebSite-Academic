@@ -40,4 +40,4 @@ externalPort = 3000
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bun", "run", "start"]
-build = ["bun", "run", "build"]
+build = ["sh", "-c", "NODE_ENV=production bun run build"]

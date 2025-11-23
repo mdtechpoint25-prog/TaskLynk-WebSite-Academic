@@ -26,8 +26,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 
 type Job = {
   id: number;
@@ -52,7 +50,6 @@ export default function EditingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(true);
 
   const [workTypeFilter, setWorkTypeFilter] = useState<string>('all');
@@ -121,12 +118,7 @@ export default function EditingPage() {
   }
 
   return (
-    <div className="dashboard-container">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300">
-        <div className="p-3 md:p-4 lg:p-5 w-full">
+    <div className="w-full">
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">Editing</h1>
             <p className="text-sm sm:text-base text-muted-foreground">
@@ -233,7 +225,7 @@ export default function EditingPage() {
                               </Badge>
                             </TableCell>
                             <TableCell className="text-right">
-                              <Link href={`/freelancer/jobs/${job.id}`} className="text-primary hover:underline">View</Link>
+                              <Link href={`/freelancer/jobs/${job.displayId || job.id}`} className="text-primary hover:underline">View</Link>
                             </TableCell>
                           </TableRow>
                         );
@@ -244,8 +236,6 @@ export default function EditingPage() {
               </CardContent>
             </Card>
           )}
-        </div>
-      </main>
     </div>
   );
 }

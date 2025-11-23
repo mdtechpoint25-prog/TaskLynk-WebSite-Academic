@@ -25,6 +25,9 @@ type Job = {
   id: number;
   displayId: string;
   clientId: number;
+  clientName?: string;
+  clientEmail?: string;
+  clientPhone?: string;
   title: string;
   instructions: string;
   workType: string;
@@ -35,6 +38,9 @@ type Job = {
   actualDeadline: string;
   status: string;
   assignedFreelancerId: number | null;
+  assignedFreelancerName?: string;
+  assignedFreelancerEmail?: string;
+  assignedFreelancerRating?: number | null;
   adminApproved: boolean;
   clientApproved: boolean;
   paymentConfirmed: boolean;
@@ -741,6 +747,54 @@ export default function ClientJobDetailPage() {
                 <p className="font-bold text-lg text-green-600">KSh {job.amount.toFixed(2)}</p>
               </div>
             </div>
+            
+            {/* Freelancer Details - Show who is working on this */}
+            {job.assignedFreelancerId && (
+              <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-900">
+                <Label className="text-xs text-muted-foreground">Assigned Freelancer</Label>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm truncate">{job.assignedFreelancerName || 'Freelancer'}</p>
+                    {job.assignedFreelancerEmail && (
+                      <p className="text-xs text-muted-foreground truncate">{job.assignedFreelancerEmail}</p>
+                    )}
+                  </div>
+                  {job.assignedFreelancerRating && (
+                    <Badge className="bg-yellow-500 text-white flex-shrink-0">
+                      ★ {job.assignedFreelancerRating.toFixed(1)}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Client Details - Show for admin/manager only */}
+            {(user?.role === 'admin' || user?.role === 'manager') && (
+              <div className="mt-4 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-900">
+                <Label className="text-xs text-muted-foreground">Client Information</Label>
+                <div className="mt-2 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm truncate">{job.clientName || 'Client'}</p>
+                      {job.clientEmail && (
+                        <p className="text-xs text-muted-foreground truncate">{job.clientEmail}</p>
+                      )}
+                    </div>
+                  </div>
+                  {job.clientPhone && (
+                    <div className="flex items-center justify-between p-2 rounded bg-white dark:bg-slate-900/50 border border-purple-100 dark:border-purple-900/50">
+                      <p className="text-xs font-medium text-purple-700 dark:text-purple-300">📞 {job.clientPhone}</p>
+                      <a
+                        href={`tel:${job.clientPhone}`}
+                        className="px-2 py-1 rounded text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 transition-colors whitespace-nowrap"
+                      >
+                        Call
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             
             <div className="mt-4">
               <Label className="text-xs text-muted-foreground">Instructions</Label>

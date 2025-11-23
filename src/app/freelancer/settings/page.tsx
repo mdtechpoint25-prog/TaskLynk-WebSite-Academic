@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User, Lock, Save, DollarSign } from 'lucide-react';
 import { toast } from 'sonner';
+import CPPApprovalNotification from '@/components/CPPApprovalNotification';
+import { getAllCPPLevels } from '@/lib/cpp-calculation';
 
 export default function FreelancerSettingsPage() {
   const { user, loading } = useAuth();
@@ -131,6 +133,14 @@ export default function FreelancerSettingsPage() {
           Manage your account preferences
         </p>
       </div>
+
+      {/* CPP Approval Notification - Show on first approval */}
+      {user.approved && (
+        <CPPApprovalNotification
+          cppLevels={getAllCPPLevels()}
+          isApproved={true}
+        />
+      )}
 
       <div className="space-y-6">
         {/* Profile Settings */}

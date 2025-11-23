@@ -7,6 +7,8 @@ import { sendEmail, getEmailVerificationHTML } from '@/lib/email';
 
 // Use standard Request instead of NextRequest (works better with Bun)
 export async function POST(request: Request) {
+  let pendingRegId: string | null = null;
+  
   try {
     const body = await request.json();
     const { email, password, name, role, phone, account_name, accountName } = body;
@@ -104,6 +106,18 @@ export async function POST(request: Request) {
     // Normalize email to lowercase
     const normalizedEmail = email.trim().toLowerCase();
 
+    // Check if user already exists in users table
+    const existingUser = await db.query(`
+      SELECT id FROM users WHERE email = ? LIMIT 1
+    `, [normalizedEmail]).catch(() => ({ rows: [] }));
+
+    if (existingUser?.rows?.length > 0) {
+      return NextResponse.json({
+        error: "This email is already registered. Please log in instead.",
+        code: "EMAIL_ALREADY_REGISTERED"
+      }, { status: 409 });
+    }
+
     // Check if pending registration already exists
     const existingPending = await db.select()
       .from(pendingRegistrations)
@@ -112,6 +126,7 @@ export async function POST(request: Request) {
 
     // Delete old pending registration if exists
     if (existingPending.length > 0) {
+      pendingRegId = existingPending[0].id?.toString() || null;
       await db.delete(pendingRegistrations)
         .where(eq(pendingRegistrations.email, normalizedEmail));
     }

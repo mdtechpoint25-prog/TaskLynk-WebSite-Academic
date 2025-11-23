@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter, useParams } from 'next/navigation';
-import { DashboardNav } from '@/components/dashboard-nav';
-import { FreelancerSidebar } from '@/components/freelancer-sidebar';
 import { Card, CardContent, CardHeader, CardDescription, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -73,7 +71,6 @@ export default function FreelancerOrderDetailPage() {
   const [processing, setProcessing] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showBidConfirm, setShowBidConfirm] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (!loading) {
@@ -313,12 +310,8 @@ export default function FreelancerOrderDetailPage() {
   const deadlineToDisplay = job?.freelancerDeadline || job?.deadline;
 
   return (
-    <div className="min-h-screen flex bg-background">
-      <DashboardNav onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
-      <FreelancerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      <main className="flex-1 pt-[72px] ml-0 md:ml-64 bg-background transition-all duration-300 overflow-y-auto">
-        <div className="p-3 md:p-4 lg:p-5 w-full max-w-6xl mx-auto">
+    <>
+      <div className="w-full max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">
             <Link href="/freelancer/orders">
@@ -517,8 +510,7 @@ export default function FreelancerOrderDetailPage() {
               </Card>
             </div>
           </div>
-        </div>
-      </main>
+      </div>
 
       {/* Bid Dialog */}
       <Dialog open={bidDialogOpen} onOpenChange={setBidDialogOpen}>
@@ -585,6 +577,6 @@ export default function FreelancerOrderDetailPage() {
         cancelText="Cancel"
         onConfirm={handlePlaceBid}
       />
-    </div>
+    </>
   );
 }

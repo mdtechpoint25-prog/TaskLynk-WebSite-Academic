@@ -84,7 +84,6 @@ export default function FreelancerOrdersPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [myBids, setMyBids] = useState<Bid[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [academicLevel, setAcademicLevel] = useState('All Available');
   const [discipline, setDiscipline] = useState('');
   const [deadline, setDeadline] = useState('All available');

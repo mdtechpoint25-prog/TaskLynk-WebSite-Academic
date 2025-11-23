@@ -474,7 +474,7 @@ export function FreelancerJobsContent() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Link href={`/freelancer/jobs/${job.id}`} className="text-primary hover:underline">View</Link>
+                    <Link href={`/freelancer/jobs/${job.displayId || job.id}`} className="text-primary hover:underline">View</Link>
                   </TableCell>
                 </TableRow>
               );

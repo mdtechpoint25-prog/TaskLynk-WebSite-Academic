@@ -224,7 +224,7 @@ export default function FreelancerDashboard() {
                       {filteredJobs.map((job) => (
                         <tr 
                           key={job.id}
-                          onClick={() => router.push(`/freelancer/jobs/${job.id}`)}
+                          onClick={() => router.push(`/freelancer/jobs/${job.displayId || job.id}`)}
                           className="border-b hover:bg-muted/50 cursor-pointer transition-colors"
                         >
                           <td className="py-2 px-3 text-xs text-primary font-mono">{job.displayId}</td>

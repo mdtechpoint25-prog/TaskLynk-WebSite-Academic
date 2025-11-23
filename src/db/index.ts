@@ -1,21 +1,25 @@
 
-import { Pool } from 'pg';
-import { drizzle } from 'drizzle-orm/node-postgres';
+import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/libsql';
 import * as schema from '@/db/schema';
 
-if (!process.env.DATABASE_URL) {
+if (!process.env.TURSO_CONNECTION_URL) {
   throw new Error(
-    'DATABASE_URL must be set. Did you forget to provision a database?'
+    'TURSO_CONNECTION_URL must be set. Did you forget to provision a database?'
   );
 }
 
-const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+if (!process.env.TURSO_AUTH_TOKEN) {
+  throw new Error(
+    'TURSO_AUTH_TOKEN must be set. Did you forget to provision a database?'
+  );
+}
+
+const client = createClient({
+  url: process.env.TURSO_CONNECTION_URL,
+  authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
-export const db = drizzle(pool, { schema });
+export const db = drizzle(client, { schema });
 
 export type Database = typeof db;

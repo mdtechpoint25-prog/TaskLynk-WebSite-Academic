@@ -130,8 +130,8 @@ function FreelancerSidebarContent({ isOpen, onClose }: FreelancerSidebarContentP
                 <ul className="mt-1 ml-8 space-y-1">
                   <li>
                     <Link
-                      href="/freelancer/orders"
-                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname.startsWith("/freelancer/orders") ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
+                      href="/freelancer/jobs"
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md border text-sm ${pathname === "/freelancer/jobs" ? "bg-sidebar-accent text-sidebar-accent-foreground border-sidebar-border" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-transparent"}`}
                     >
                       <Briefcase className="h-3.5 w-3.5" /> Available Orders
                     </Link>

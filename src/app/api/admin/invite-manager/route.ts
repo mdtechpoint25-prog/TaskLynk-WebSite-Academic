@@ -4,69 +4,16 @@ import { managerInvitations, users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import crypto from 'crypto';
 import { sendEmail, ADMIN_EMAILS } from '@/lib/email';
-import { createClient } from '@libsql/client';
+import { requireAdminRole } from '@/lib/admin-auth';
 
 export async function POST(req: NextRequest) {
   try {
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Require admin role using centralized helper
+    const authCheck = await requireAdminRole(req);
+    if (authCheck.error) {
+      return NextResponse.json({ error: authCheck.error }, { status: authCheck.status });
     }
-
-    const rawToken = authHeader.split(' ')[1];
-    // Parse token - could be numeric user ID or session token string
-    let userId: number | null = null;
-    
-    // Try parsing as integer first
-    const parsed = parseInt(rawToken);
-    if (!isNaN(parsed) && parsed > 0) {
-      userId = parsed;
-    } else {
-      // Token might be a session token string - look up user by session token
-      const client = createClient({
-        url: process.env.TURSO_CONNECTION_URL!,
-        authToken: process.env.TURSO_AUTH_TOKEN!,
-      });
-      
-      // Try to find user by session token (if session table exists)
-      try {
-        const sessionCheck = await client.execute({
-          sql: 'SELECT user_id FROM session WHERE token = ? LIMIT 1',
-          args: [rawToken],
-        });
-        if (sessionCheck.rows.length > 0) {
-          userId = Number((sessionCheck.rows[0] as any).user_id);
-        }
-      } catch (e) {
-        // Session table might not exist - continue with role check
-      }
-    }
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
-    }
-
-    // Verify admin user using legacy-safe columns (role_id) and role text fallback
-    const client = createClient({
-      url: process.env.TURSO_CONNECTION_URL!,
-      authToken: process.env.TURSO_AUTH_TOKEN!,
-    });
-    const adminCheck = await client.execute({
-      sql: 'SELECT id, name, email, role, role_id FROM users WHERE id = ? LIMIT 1',
-      args: [userId],
-    });
-    if (adminCheck.rows.length === 0) {
-      return NextResponse.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
-    }
-    const adminRow: any = adminCheck.rows[0];
-    const roleText = String(adminRow.role ?? '').toLowerCase();
-    const roleIdStr = String(adminRow.role_id ?? '');
-    const emailText = String(adminRow.email ?? '').toLowerCase();
-    const isAdminEmail = Array.isArray(ADMIN_EMAILS) && ADMIN_EMAILS.map((e) => e.toLowerCase()).includes(emailText);
-    const isAdmin = roleText === 'admin' || roleIdStr === '1' || isAdminEmail;
-    if (!isAdmin) {
-      return NextResponse.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
-    }
+    const adminUser = authCheck.user;
 
     const body = await req.json();
     const { email } = body;
@@ -107,7 +54,7 @@ export async function POST(req: NextRequest) {
     const [invitation] = await db.insert(managerInvitations).values({
       email,
       token: invitationToken,
-      createdBy: userId,
+      createdBy: adminUser.id,
       createdAt: new Date().toISOString(),
       used: false,
       expiresAt,
@@ -117,7 +64,7 @@ export async function POST(req: NextRequest) {
     const invitationLink = `https://tasklynk.co.ke/manager/register?token=${invitationToken}`;
 
     // Send email invitation
-    const emailHTML = getManagerInvitationEmailHTML(email, invitationLink, String(adminRow.name ?? 'Admin'));
+    const emailHTML = getManagerInvitationEmailHTML(email, invitationLink, String(adminUser.name ?? 'Admin'));
     const emailResult = await sendEmail({
       to: email,
       subject: 'Manager Invitation - TaskLynk Academic Platform',

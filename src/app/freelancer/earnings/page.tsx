@@ -22,6 +22,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import CPPProgressWidget from '@/components/CPPProgressWidget';
 
 type Earning = {
   id: number;
@@ -96,6 +97,11 @@ export default function FreelancerEarningsPage() {
           Track your earnings from completed orders and pending payments
         </p>
       </div>
+
+      {/* CPP Progress Widget */}
+      {user && (
+        <CPPProgressWidget freelancerId={user.id} />
+      )}
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-3">

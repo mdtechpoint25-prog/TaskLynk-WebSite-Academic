@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { FileText, Plus, AlertTriangle, RefreshCw, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { ActiveWritersCount } from '@/components/ActiveWritersCount';
+import OnlineManagersWidget from '@/components/OnlineManagersWidget';
 
 type Job = {
   id: number;
@@ -183,6 +185,16 @@ export default function ClientDashboardPage() {
         <p className="text-center text-[10px] text-muted-foreground mt-2">
           Check ratings for each writer, client or editor
         </p>
+      </div>
+
+      {/* Active Writers Count Widget */}
+      <div className="p-4 border-b">
+        <ActiveWritersCount showNames={false} autoRefresh={true} refreshInterval={30000} />
+      </div>
+
+      {/* Online Managers Widget */}
+      <div className="p-4 border-b">
+        <OnlineManagersWidget />
       </div>
 
       {/* Search Bar */}

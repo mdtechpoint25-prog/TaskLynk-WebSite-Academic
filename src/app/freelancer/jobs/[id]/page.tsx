@@ -121,7 +121,7 @@ export default function FreelancerJobDetailPage() {
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  
 
   // NEW: File type selection & notes
   const [selectedFileType, setSelectedFileType] = useState<

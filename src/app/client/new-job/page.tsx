@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Info, Calculator, ExternalLink, Link as LinkIcon, CheckCircle, X, Send, Phone, Upload, File as FileIcon, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { FreelancerPreference } from '@/components/FreelancerPreference';
 
 // Service Catalog with Updated Pricing
 const SERVICE_CATALOG = {
@@ -100,6 +101,10 @@ export default function NewJobPage() {
     amount: '',
     deadline: '',
   });
+
+  // Freelancer preference state
+  const [preferredFreelancerId, setPreferredFreelancerId] = useState<number | null>(null);
+  const [freelancerPreference, setFreelancerPreference] = useState<'preferred' | 'any'>('any');
 
   // Determine if this is an account client
   const isAccountClient = Boolean(user?.accountId) || user?.role === 'account_owner';
@@ -349,6 +354,9 @@ export default function NewJobPage() {
           effectiveCpp,
           accountOrderNumber: formData.accountOrderNumber || undefined,
           accountLinked: belongsToAccount,
+          // Freelancer preference
+          preferredFreelancerId: freelancerPreference === 'preferred' ? preferredFreelancerId : null,
+          freelancerPreference: freelancerPreference,
         }),
       });
 
@@ -812,6 +820,18 @@ export default function NewJobPage() {
                 Request printable sources with the final submission
               </Label>
             </div>
+
+            {/* Freelancer Preference Selection */}
+            {user?.id && (
+              <FreelancerPreference
+                clientId={user.id}
+                onSelect={(freelancerId, preference) => {
+                  setPreferredFreelancerId(freelancerId);
+                  setFreelancerPreference(preference);
+                }}
+                disabled={loading}
+              />
+            )}
 
             {/* ENHANCED FILE UPLOAD SECTION - Now clearly marked as optional */}
             <div className="space-y-4">

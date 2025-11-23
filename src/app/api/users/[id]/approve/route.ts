@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@libsql/client';
+import { db } from '@/db';
+import { users, notifications } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 import { sendEmail, getAccountApprovedEmailHTML } from '@/lib/email';
 import { requireAdminRole } from '@/lib/admin-auth';
 import { logAdminActionWithRequest, AdminActions, AuditTargetTypes } from '@/lib/admin-audit';
@@ -33,32 +35,15 @@ export async function POST(
 
     const userId = parseInt(id);
 
-    // Create direct database client
-    const client = createClient({
-      url: process.env.TURSO_CONNECTION_URL!,
-      authToken: process.env.TURSO_AUTH_TOKEN!,
-    });
-
-    // Check if user exists
-    const existingUser = await client.execute({
-      sql: 'SELECT * FROM users WHERE id = ?',
-      args: [userId]
-    });
-
-    if (existingUser.rows.length === 0) {
-      return NextResponse.json(
-        { error: 'User not found', code: 'USER_NOT_FOUND' },
-        { status: 404 }
-      );
+    // Check if user exists via drizzle
+    const [userRow] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (!userRow) {
+      return NextResponse.json({ error: 'User not found', code: 'USER_NOT_FOUND' }, { status: 404 });
     }
 
-    const user = existingUser.rows[0];
-
-    // 🔴 CRITICAL FIX: Update both 'approved' field AND 'status' to 'active' once approved
-    await client.execute({
-      sql: 'UPDATE users SET approved = ?, status = ?, updated_at = ? WHERE id = ?',
-      args: [1, 'active', new Date().toISOString(), userId]
-    });
+    // Update approved flag and status
+    const now = new Date().toISOString();
+    await db.update(users).set({ approved: true, status: 'active', updatedAt: now }).where(eq(users.id, userId));
 
     console.log(`[Approve] User ${userId} approved successfully`);
 
@@ -70,25 +55,22 @@ export async function POST(
       userId,
       AuditTargetTypes.USER,
       {
-        userEmail: user.email,
-        userName: user.name,
-        userRole: user.role,
+        userEmail: userRow.email,
+        userName: userRow.name,
+        userRole: userRow.role,
       }
     );
 
     // Create notification (best-effort)
     try {
-      await client.execute({
-        sql: `INSERT INTO notifications (user_id, type, title, message, read, created_at) 
-              VALUES (?, ?, ?, ?, ?, ?)`,
-        args: [
-          userId,
-          'account_approved',
-          'Account Approved',
-          `Congratulations! Your account has been approved. You can now start using TaskLynk.`,
-          0,
-          new Date().toISOString()
-        ]
+      await db.insert(notifications).values({
+        userId: userId,
+        jobId: null,
+        type: 'account_approved',
+        title: 'Account Approved',
+        message: `Congratulations! Your account has been approved. You can now start using TaskLynk.`,
+        read: false,
+        createdAt: now,
       });
     } catch (notificationError) {
       console.error('Failed to create notification:', notificationError);
@@ -97,30 +79,24 @@ export async function POST(
     // Send email (best-effort)
     try {
       await sendEmail({
-        to: String(user.email),
+        to: String(userRow.email),
         subject: '🎉 Your TaskLynk Account Has Been Approved!',
-        html: getAccountApprovedEmailHTML(String(user.name), String(user.role)),
+        html: getAccountApprovedEmailHTML(String(userRow.name), String(userRow.role)),
       });
     } catch (emailError) {
       console.error('Failed to send email notification:', emailError);
     }
 
     // Return updated user data
-    const updatedUser = await client.execute({
-      sql: 'SELECT * FROM users WHERE id = ?',
-      args: [userId]
-    });
-
-    const updatedUserData = updatedUser.rows[0];
-
+    const [updatedUser] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
     return NextResponse.json({
-      id: updatedUserData.id,
-      email: updatedUserData.email,
-      name: updatedUserData.name,
-      role: updatedUserData.role,
-      approved: updatedUserData.approved,
-      status: updatedUserData.status,
-      phone: updatedUserData.phone
+      id: updatedUser.id,
+      email: updatedUser.email,
+      name: updatedUser.name,
+      role: updatedUser.role,
+      approved: updatedUser.approved,
+      status: updatedUser.status,
+      phone: updatedUser.phone
     }, { status: 200 });
   } catch (error) {
     console.error('POST error (approve):', error);
